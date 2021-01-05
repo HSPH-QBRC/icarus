@@ -1,0 +1,10 @@
+{
+    "id": "5fdb7a728cb086cbfe53e246",
+    "name": "dailyUpdate",
+    "type": "SCHEDULED",
+    "config": {
+        "schedule": "0 15 * * *"
+    },
+    "function_name": "updateHarvardTestsFromApi",
+    "disabled": false
+}

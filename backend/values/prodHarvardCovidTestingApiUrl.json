@@ -1,0 +1,6 @@
+{
+    "id": "5fdb9f7cc549550761272b63",
+    "name": "prodHarvardCovidTestingApiUrl",
+    "value": "https://go.apis.huit.harvard.edu/ats/ess-public-covid/v1/summary",
+    "from_secret": false
+}

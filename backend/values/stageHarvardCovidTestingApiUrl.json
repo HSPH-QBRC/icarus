@@ -1,0 +1,6 @@
+{
+    "id": "5fda9d0870bb6175b2237bad",
+    "name": "stageHarvardCovidTestingApiUrl",
+    "value": "https://go.stage.apis.huit.harvard.edu/ats/ess-public-covid/v1/summary",
+    "from_secret": false
+}

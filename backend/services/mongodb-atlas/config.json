@@ -1,0 +1,11 @@
+{
+    "id": "5fda93d44045e8dcc030c8de",
+    "name": "mongodb-atlas",
+    "type": "mongodb-atlas",
+    "config": {
+        "clusterName": "dev-aws-icarus",
+        "readPreference": "primary",
+        "wireProtocolEnabled": false
+    },
+    "version": 1
+}
