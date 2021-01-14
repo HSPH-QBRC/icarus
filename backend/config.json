@@ -10,5 +10,6 @@
     },
     "sync": {
         "development_mode_enabled": false
-    }
+    },
+    "environment": "none"
 }
