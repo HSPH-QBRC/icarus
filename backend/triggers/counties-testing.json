@@ -1,0 +1,10 @@
+{
+    "id": "600b046f6015496cb4baea06",
+    "name": "counties-testing",
+    "type": "SCHEDULED",
+    "config": {
+        "schedule": "0 15 * * *"
+    },
+    "function_name": "getCountyCasesFromDelphi",
+    "disabled": false
+}

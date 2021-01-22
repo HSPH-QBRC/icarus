@@ -1,0 +1,6 @@
+{
+    "id": "60076c93c8c5ac368224081b",
+    "name": "delphiEpidataApiBaseUrl",
+    "value": "https://api.covidcast.cmu.edu/epidata/api.php?endpoint=covidcast",
+    "from_secret": false
+}

@@ -1,6 +1,6 @@
 {
     "id": "5fdb7a728cb086cbfe53e246",
-    "name": "dailyUpdate",
+    "name": "harvard-testing",
     "type": "SCHEDULED",
     "config": {
         "schedule": "0 15 * * *"
