@@ -3,6 +3,10 @@
     "id": "6009def93cfa1e7062e3bb11",
     "name": "counties",
     "value": {
+        "06085": "Santa Clara",
+        "09009": "New Haven",
+        "17031": "Cook",
+        "24510": "Baltimore City",
         "25000": "OtherMA",
         "25001": "Barnstable",
         "25003": "Berkshire",
@@ -17,6 +21,13 @@
         "25021": "Norfolk",
         "25023": "Plymouth",
         "25025": "Suffolk",
-        "25027": "Worcester"
+        "25027": "Worcester",
+        "33009": "Grafton",
+        "34021": "Mercer",
+        "36061": "New York",
+        "36109": "Tompkins",
+        "37063": "Durham",
+        "42101": "Philadelphia",
+        "44007": "Providence"
     }
 }

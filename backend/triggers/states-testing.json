@@ -1,0 +1,10 @@
+{
+    "id": "600f553b228bc03fa78e79ef",
+    "name": "states-testing",
+    "type": "SCHEDULED",
+    "config": {
+        "schedule": "1 15 * * *"
+    },
+    "function_name": "getStateCasesFromDelphi",
+    "disabled": false
+}
