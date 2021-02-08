@@ -1,0 +1,18 @@
+{
+    "id": "602199e75c394c1a231e7824",
+    "name": "states",
+    "value": [
+        "CA",
+        "CT",
+        "IL",
+        "MA",
+        "MD",
+        "NC",
+        "NH",
+        "NJ",
+        "NY",
+        "PA",
+        "RI"
+    ],
+    "from_secret": false
+}
