@@ -27,6 +27,8 @@ exports = async function(){
             "fips": cbsaCode,
             "name": metros[cbsaCode],
             "newCases": actuals["newCases"],
+            "positiveTests": actuals["positiveTests"],
+            "negativeTests": actuals["negativeTests"],
             "vaccinesDistributed": actuals["vaccinesDistributed"],
             "vaccinationsInitiated": actuals["vaccinationsInitiated"],
             "vaccinationsCompleted": actuals["vaccinationsCompleted"],

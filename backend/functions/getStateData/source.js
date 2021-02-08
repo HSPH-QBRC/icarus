@@ -25,6 +25,8 @@ exports = async function(){
             "date": new Date(actuals["date"]),
             "name": state,
             "newCases": actuals["newCases"],
+            "positiveTests": actuals["positiveTests"],
+            "negativeTests": actuals["negativeTests"],
             "vaccinesDistributed": actuals["vaccinesDistributed"],
             "vaccinationsInitiated": actuals["vaccinationsInitiated"],
             "vaccinationsCompleted": actuals["vaccinationsCompleted"],
