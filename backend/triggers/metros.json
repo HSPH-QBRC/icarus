@@ -1,0 +1,10 @@
+{
+    "id": "601df875ab0d8d322161d972",
+    "name": "metros",
+    "type": "SCHEDULED",
+    "config": {
+        "schedule": "3 15 * * *"
+    },
+    "function_name": "getMetroData",
+    "disabled": false
+}

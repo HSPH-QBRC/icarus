@@ -1,0 +1,19 @@
+{
+    "from_secret": false,
+    "id": "601c76abab0d8d3221271b8f",
+    "name": "metros",
+    "value": {
+        "12580": "Baltimore-Columbia-Towson, MD",
+        "14460": "Boston-Cambridge-Newton, MA-NH",
+        "16980": "Chicago-Naperville-Elgin, IL-IN-WI",
+        "20500": "Durham-Chapel Hill, NC",
+        "27060": "Ithaca, NY",
+        "30100": "Lebanon, NH-VT",
+        "35300": "New Haven-Milford, CT",
+        "35620": "New York-Newark-Jersey City, NY-NJ-PA",
+        "37980": "Philadelphia-Camden-Wilmington, PA-NJ-DE",
+        "39300": "Providence-Warwick, RI-MA",
+        "41940": "San Jose-Sunnyvale-Santa Clara, CA",
+        "45940": "Trenton, NJ"
+    }
+}

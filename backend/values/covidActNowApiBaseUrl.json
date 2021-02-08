@@ -1,0 +1,6 @@
+{
+    "id": "601c79d836e28bebea085005",
+    "name": "covidActNowApiBaseUrl",
+    "value": "https://api.covidactnow.org/v2",
+    "from_secret": false
+}

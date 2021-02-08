@@ -1,0 +1,10 @@
+{
+    "id": "6019ca8fc17f98990522661a",
+    "name": "strains",
+    "type": "SCHEDULED",
+    "config": {
+        "schedule": "2 15 * * *"
+    },
+    "function_name": "getStrains",
+    "disabled": false
+}
