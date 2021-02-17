@@ -5,6 +5,10 @@
     "location": "US-VA",
     "deployment_model": "GLOBAL",
     "security": {},
+    "hosting": {
+        "enabled": true,
+        "app_default_domain": "dev-icarus-mzcsi.mongodbstitch.com"
+    },
     "custom_user_data_config": {
         "enabled": false
     },

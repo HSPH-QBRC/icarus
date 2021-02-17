@@ -1,0 +1,43 @@
+{
+    "collection": "strains",
+    "database": "covid",
+    "id": "6024140d0ff2832f7df72be0",
+    "roles": [
+        {
+            "name": "default",
+            "apply_when": {},
+            "read": true,
+            "write": false,
+            "insert": false,
+            "delete": false,
+            "search": true,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            },
+            "age": {
+                "bsonType": "int"
+            },
+            "date": {
+                "bsonType": "date"
+            },
+            "division": {
+                "bsonType": "string"
+            },
+            "gisaid_epi_isl": {
+                "bsonType": "string"
+            },
+            "sex": {
+                "bsonType": "string"
+            },
+            "strain": {
+                "bsonType": "string"
+            }
+        },
+        "title": "strain"
+    }
+}
