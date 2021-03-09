@@ -5,8 +5,9 @@ account: ivyplus
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 3692645
-bundleId: 4276653
+bundleId: 4322169
 url: https://ivyplus.shinyapps.io/icarus/
-when: 1614368274.04474
+when: 1615312779.50363
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: .RData
