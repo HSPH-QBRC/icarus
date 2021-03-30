@@ -1,18 +1,7 @@
 exports = async function(payload, response) {
   // aggregate data from different collections by ISO week for downstream analyses
   const database = context.services.get("mongodb-atlas").db("covid");
-  const locations = {
-    "bostoncollege": {
-      "metro": "Boston-Cambridge-Newton, MA-NH",
-      "county": "Middlesex",
-      "state": "MA"
-    },
-    "harvard": {
-      "metro": "Boston-Cambridge-Newton, MA-NH",
-      "county": "Middlesex",
-      "state": "MA"
-    }
-  };
+  const locations = context.values.get("locations");
   let csv = [
     "school,week,county_positive,county_density,county_vaccine,state_positive,state_density,state_vaccine,metro_positive,metro_density,metro_vaccine,positive,total"
   ];
