@@ -1,14 +1,13 @@
 exports = async function(payload, response) {
   // aggregate data from different collections by ISO week for downstream analyses
   const database = context.services.get("mongodb-atlas").db("covid");
-  const locations = context.values.get("locations");
   let csv = [
     "school,week,county_positive,county_density,county_vaccine,state_positive,state_density,state_vaccine,metro_positive,metro_density,metro_vaccine,positive,total"
   ];
 
-  for (const school in locations) {
-    const collection = database.collection(`${school}.weekly`);
-    const pipeline = [
+  for (const institution of context.values.get("institutions")) {
+    const collection = database.collection(`${institution.collection}.weekly`);
+    let pipeline = [
       {
         '$lookup': {
           'from': 'counties.weekly', 
@@ -30,63 +29,144 @@ exports = async function(payload, response) {
           'foreignField': '_id.week', 
           'as': 'metros'
         }
-      }, {
-        '$project': {
-          'tests': 1, 
-          'positives': 1, 
-          'county': {
-            '$filter': {
-              'input': '$counties', 
-              'as': 'county', 
-              'cond': {
-                '$eq': [
-                  '$$county._id.name', locations[school].county
-                ]
+      }
+    ];
+    if (institution.name === "MA public schools") {
+      pipeline = pipeline.concat([
+        {
+          '$project': {
+            'tests': 1, 
+            'positives': 1, 
+            'counties': {
+              '$filter': {
+                'input': '$counties', 
+                'as': 'county', 
+                'cond': {
+                  '$or': [
+                    {
+                      '$eq': [
+                        '$$county._id.name', 'Suffolk'
+                      ]
+                    }, {
+                      '$eq': [
+                        '$$county._id.name', 'Middlesex'
+                      ]
+                    }
+                  ]
+                }
               }
-            }
-          }, 
-          'state': {
-            '$filter': {
-              'input': '$states', 
-              'as': 'state', 
-              'cond': {
-                '$eq': [
-                  '$$state._id.name', locations[school].state
-                ]
+            }, 
+            'state': {
+              '$filter': {
+                'input': '$states', 
+                'as': 'state', 
+                'cond': {
+                  '$eq': [
+                    '$$state._id.name', institution.state
+                  ]
+                }
               }
-            }
-          }, 
-          'metro': {
-            '$filter': {
-              'input': '$metros', 
-              'as': 'metro', 
-              'cond': {
-                '$eq': [
-                  '$$metro._id.name', locations[school].metro
-                ]
+            }, 
+            'metro': {
+              '$filter': {
+                'input': '$metros', 
+                'as': 'metro', 
+                'cond': {
+                  '$eq': [
+                    '$$metro._id.name', institution.metro
+                  ]
+                }
               }
             }
           }
+        }, {
+          '$addFields': {
+            'county': {
+              'positives': {
+                '$sum': '$counties.positives'
+              }, 
+              'density': {
+                '$divide': [
+                  {
+                    '$sum': '$counties.density'
+                  }, 2
+                ]
+              }, 
+              'vaccinations': {
+                '$sum': '$counties.vaccinations'
+              }
+            }
+          }
+        }, {
+          '$unwind': {
+            'path': '$state'
+          }
+        }, {
+          '$unwind': {
+            'path': '$metro'
+          }
         }
-      }, {
-        '$unwind': {
-          'path': '$county'
+      ]);
+    } else {
+      pipeline = pipeline.concat([
+        {
+          '$project': {
+            'tests': 1, 
+            'positives': 1, 
+            'county': {
+              '$filter': {
+                'input': '$counties', 
+                'as': 'county', 
+                'cond': {
+                  '$eq': [
+                    '$$county._id.name', institution.county
+                  ]
+                }
+              }
+            }, 
+            'state': {
+              '$filter': {
+                'input': '$states', 
+                'as': 'state', 
+                'cond': {
+                  '$eq': [
+                    '$$state._id.name', institution.state
+                  ]
+                }
+              }
+            }, 
+            'metro': {
+              '$filter': {
+                'input': '$metros', 
+                'as': 'metro', 
+                'cond': {
+                  '$eq': [
+                    '$$metro._id.name', institution.metro
+                  ]
+                }
+              }
+            }
+          }
+        }, {
+          '$unwind': {
+            'path': '$county'
+          }
+        }, {
+          '$unwind': {
+            'path': '$state'
+          }
+        }, {
+          '$unwind': {
+            'path': '$metro'
+          }
         }
-      }, {
-        '$unwind': {
-          'path': '$state'
-        }
-      }, {
-        '$unwind': {
-          'path': '$metro'
-        }
-      }
-    ];
+      ]);
+    }  // end if
+
     const results = await collection.aggregate(pipeline).toArray();
-  
     for (const entry of results) {
       const row = [
-        school, entry._id.week,
+        institution.name, entry._id.week,
         entry.county.positives, entry.county.density, entry.county.vaccinations,
         entry.state.positives, entry.state.density, entry.state.vaccinations,
         entry.metro.positives, entry.metro.density, entry.metro.vaccinations,
@@ -94,11 +174,10 @@ exports = async function(payload, response) {
       ];
       csv.push(row.join(","));
     }
-  }
+  }  // end for
 
   response.setStatusCode(200);
   response.setHeader("Content-Type", "text/csv");
   response.addHeader("Content-Disposition", 'attachment; filename="isoweeks.csv"');
   response.setBody(csv.join("\n"));
-  // return csv.join("\n");
 };

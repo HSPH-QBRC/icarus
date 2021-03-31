@@ -1,0 +1,55 @@
+{
+    "id": "6063a791579a811c02ea1568",
+    "name": "institutions",
+    "value": [
+        {
+            "name": "BC",
+            "collection": "bostoncollege",
+            "metro": "Boston-Cambridge-Newton, MA-NH",
+            "county": "Middlesex",
+            "state": "MA"
+        },
+        {
+            "name": "Columbia",
+            "collection": "columbia",
+            "metro": "New York-Newark-Jersey City, NY-NJ-PA",
+            "county": "New York",
+            "state": "NY"
+        },
+        {
+            "name": "Dartmouth",
+            "collection": "dartmouth",
+            "metro": "Lebanon, NH-VT",
+            "county": "Grafton",
+            "state": "NH"
+        },
+        {
+            "name": "Harvard",
+            "collection": "harvard",
+            "metro": "Boston-Cambridge-Newton, MA-NH",
+            "county": "Middlesex",
+            "state": "MA"
+        },
+        {
+            "name": "Northeastern",
+            "collection": "northeastern",
+            "metro": "Boston-Cambridge-Newton, MA-NH",
+            "county": "Suffolk",
+            "state": "MA"
+        },
+        {
+            "name": "Princeton",
+            "collection": "princeton",
+            "metro": "Trenton, NJ",
+            "county": "Mercer",
+            "state": "NJ"
+        },
+        {
+            "name": "MA public schools",
+            "collection": "schooldistricts",
+            "metro": "Boston-Cambridge-Newton, MA-NH",
+            "state": "MA"
+        }
+    ],
+    "from_secret": false
+}
