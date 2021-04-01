@@ -31,7 +31,7 @@ exports = async function(payload, response) {
         }
       }
     ];
-    if (institution.name === "MA public schools") {
+    if (["MA public schools", "Boston-area public schools"].includes(institution.name)) {
       pipeline = pipeline.concat([
         {
           '$project': {

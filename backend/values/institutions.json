@@ -49,6 +49,12 @@
             "collection": "schooldistricts",
             "metro": "Boston-Cambridge-Newton, MA-NH",
             "state": "MA"
+        },
+        {
+            "name": "Boston-area public schools",
+            "collection": "schooldistrictsboston",
+            "metro": "Boston-Cambridge-Newton, MA-NH",
+            "state": "MA"
         }
     ],
     "from_secret": false
