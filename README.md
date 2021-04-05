@@ -1,6 +1,13 @@
-Deployment:
+Deployment
 
-[mmwr-week](https://www.npmjs.com/package/mmwr-week) package needs to be uploaded into MongoDB Realm app as an external dependency
+Export MongoDB Realm app:
+```shell
+realm-cli export --app-id=dev-icarus-mzcsi --output=backend --include-hosting
+```
+Import MongoDB Realm app:
+```shell
+realm-cli import --path backend --include-hosting
+```
 
 Folder description:
 * `backend` - MongoDB Realm app downloaded using `realm-cli export`
