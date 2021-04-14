@@ -1,9 +1,9 @@
 library(shiny)
 library(ggplot2)
 library(GGally)
-library(MASS)
-library(jtools)
-library(reshape2)
+# library(MASS)
+# library(jtools)
+# library(reshape2)
 library(mongolite)
 
 options(mongodb = list(
@@ -31,26 +31,51 @@ loadData <- function() {
   data
 }
 
+df <- loadData()
+
+institutions <- unique(df$school)
+publicSchools <- c("MA public schools", "Boston-area public schools")
+universities <- institutions[! institutions %in% publicSchools]
+
 ui <- fluidPage(
   titlePanel("ICARUS dashboard"),
 
-  selectInput("school", "School:", c("BC",
-                                     "Columbia",
-                                     "Dartmouth",
-                                     "Harvard",
-                                     "Northeastern",
-                                     "Princeton")),
-  plotOutput("universityCasesPlot"),
+  fluidRow(
+    column(1, checkboxGroupInput("schools", "Schools:", universities,
+                                 selected = "Harvard")),
+    column(8, plotOutput("universityCasesPlot")),
+    column(3, plotOutput("pairwiseCorrelations"))
+  )
 )
 
 server <- function(input, output) {
-  df <- loadData()
-  schoolData <- reactive(df[df$school %in% c(input$school),])
+  universityCasesData <- reactive(df[df$school %in% input$schools,])
 
   output$universityCasesPlot <- renderPlot({
-    ggplot(schoolData(), aes(week, positive)) + geom_point()
+    ggplot(universityCasesData(), aes(week, positive)) +
+      geom_point(aes(color = school)) + geom_line(aes(color = school))
   })
 
+  # df.uni <- df[! df$school %in% publicSchools,]
+  correlationData <- reactive({
+    tmp_df <- universityCasesData()[, which(
+        names(universityCasesData()) %in% c(
+          "county_positive", "county_density", "state_positive", "state_density",
+          "metro_positive", "metro_density", "positive", "total", "week"
+        )
+      )]
+    for (n in c(
+      "county_positive", "state_positive",
+      "metro_positive", "positive", "total"
+    )) {
+      tmp_df[, n] <- log(tmp_df[, n] + 1)
+    }
+    tmp_df
+  })
+  
+  output$pairwiseCorrelations <- renderPlot({
+    ggcorr(correlationData())
+  })
 }
 
 shinyApp(ui, server)
