@@ -45,6 +45,16 @@ ui <- fluidPage(
                                  selected = "Harvard")),
     column(8, plotOutput("universityCasesPlot")),
     column(3, plotOutput("pairwiseCorrelations"))
+  ),
+
+  fluidRow(
+    column(2, radioButtons("school", "Schools:", universities,
+                           selected = "Harvard")),
+    column(8, plotOutput("universityAreaCasesPlot")),
+    column(2, radioButtons("area", "Surrounding areas:",
+                           c("Metro" = "metro_positive",
+                             "County" = "county_positive",
+                             "State" = "state_positive"))),
   )
 )
 
@@ -65,17 +75,22 @@ server <- function(input, output) {
         )
       )]
     for (n in c(
-      "county_positive", "state_positive",
-      "metro_positive", "positive", "total"
+      "county_positive", "state_positive", "metro_positive", "positive", "total"
     )) {
       tmp_df[, n] <- log(tmp_df[, n] + 1)
     }
-    tmp_df
+    return(tmp_df)
   })
   
   output$pairwiseCorrelations <- renderPlot({
     ggcorr(correlationData())
   })
+
+  output$universityAreaCasesPlot <- renderPlot({
+    ggplot(df[df$school %in% input$school,], aes(week, !!sym(input$area))) +
+      geom_line()
+  })
+
 }
 
 shinyApp(ui, server)
