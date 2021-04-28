@@ -1,9 +1,6 @@
 library(shiny)
 library(ggplot2)
 library(GGally)
-# library(MASS)
-# library(jtools)
-# library(reshape2)
 library(mongolite)
 
 options(mongodb = list(
@@ -12,7 +9,7 @@ options(mongodb = list(
     "password" = Sys.getenv("MONGODB_PASSWORD")
 ))
 databaseName <- "covid"
-collectionName <- "allTestingData"
+collectionName <- "isoweeks"
 
 loadData <- function() {
   # Connect to the database
@@ -28,7 +25,7 @@ loadData <- function() {
   )
   # Read all the entries
   data <- db$find()
-  data
+  return(data)
 }
 
 df <- loadData()
@@ -37,11 +34,14 @@ institutions <- unique(df$school)
 publicSchools <- c("MA public schools", "Boston-area public schools")
 universities <- institutions[! institutions %in% publicSchools]
 
+# convert ISO weeks to the dates of Monday of each ISO week
+df$week <- as.Date(paste0(df$week, "1"), format = "%Y%W%u")
+
 ui <- fluidPage(
   titlePanel("ICARUS dashboard"),
 
   fluidRow(
-    column(1, checkboxGroupInput("schools", "Schools:", universities,
+    column(1, checkboxGroupInput("schools", "Schools:", institutions,
                                  selected = "Harvard")),
     column(8, plotOutput("universityCasesPlot")),
     column(3, plotOutput("pairwiseCorrelations"))
@@ -81,7 +81,7 @@ server <- function(input, output) {
     }
     return(tmp_df)
   })
-  
+
   output$pairwiseCorrelations <- renderPlot({
     ggcorr(correlationData())
   })
