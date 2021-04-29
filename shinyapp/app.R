@@ -46,8 +46,8 @@ ui <- fluidPage(
   fluidRow(
     column(1, checkboxGroupInput("schools", "Schools:", institutions,
                                   selected = "Harvard")),
-    column(7, tableOutput("correlationCoefficients")),
-    column(4, plotOutput("pairwiseCorrelations")),
+    column(8, tableOutput("correlationCoefficients")),
+    column(3, plotOutput("pairwiseCorrelations")),
   ),
 
   fluidRow(
@@ -87,13 +87,10 @@ server <- function(input, output) {
     return(tmp_df[,-1])
   })
 
-  output$pairwiseCorrelations <- renderPlot({
-    ggcorr(correlationData())
-  })
+  output$pairwiseCorrelations <- renderPlot(ggcorr(correlationData()))
 
-  output$correlationCoefficients <- renderTable({
-    cor(correlationData())
-  })
+  output$correlationCoefficients <- renderTable(cor(correlationData()),
+                                                rownames = TRUE)
 
   output$universityAreaCasesPlot <- renderPlot({
     ggplot(df[df$school %in% input$school,], aes(week, !!sym(input$area))) +
