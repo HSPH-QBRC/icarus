@@ -37,30 +37,52 @@ universities <- institutions[! institutions %in% publicSchools]
 # convert ISO weeks to the dates of Monday of each ISO week
 df$week <- as.Date(paste0(df$week, "1"), format = "%Y%W%u")
 
-ui <- fluidPage(
-  titlePanel("ICARUS dashboard"),
-
-  fluidRow(
-    column(12, plotOutput("universityCasesPlot")),
+# ui <- fluidPage(
+# titlePanel("ICARUS dashboard"),
+ui <- navbarPage(
+  "ICARUS dashboard",
+  tabPanel(
+    "Schools",
+    fluidRow(
+      column(12, plotOutput("universityCasesPlot")),
+    ),
+    fluidRow(
+      column(1, checkboxGroupInput("schools", "Schools:", institutions,
+                                    selected = "Harvard")),
+      column(8, tableOutput("correlationCoefficients")),
+      column(3, plotOutput("pairwiseCorrelations")),
+    ),
+    markdown("
+    Case Density: the number of cases per 100k population calculated using a 7-day rolling average.
+    ")
   ),
-  fluidRow(
-    column(1, checkboxGroupInput("schools", "Schools:", institutions,
-                                  selected = "Harvard")),
-    column(8, tableOutput("correlationCoefficients")),
-    column(3, plotOutput("pairwiseCorrelations")),
+  tabPanel(
+    "Areas",
+    fluidRow(
+      column(12, plotOutput("universityAreaCasesPlot")),
+    ),
+    fluidRow(
+      column(6, radioButtons("school", "Schools:", universities,
+                             selected = "Harvard", inline = TRUE)),
+      column(6, radioButtons("area", "Surrounding areas:",
+                             c("Metro" = "metro_positive",
+                               "County" = "county_positive",
+                               "State" = "state_positive"), inline = TRUE)),
+    ),
   ),
-
-  fluidRow(
-    column(12, plotOutput("universityAreaCasesPlot")),
-  ),
-  fluidRow(
-    column(6, radioButtons("school", "Schools:", universities,
-                           selected = "Harvard", inline = TRUE)),
-    column(6, radioButtons("area", "Surrounding areas:",
-                           c("Metro" = "metro_positive",
-                             "County" = "county_positive",
-                             "State" = "state_positive"), inline = TRUE)),
-  ),
+  tabPanel(
+    "Miscellaneous",
+    markdown("
+      Additional resources:
+      * [Radiant app](https://ivyplus.shinyapps.io/radiant)
+      * [Analysis report](https://ivyplus.shinyapps.io/icarus-report)
+      
+      Data sources:
+      * University COVID-19 dashboards
+      * [Massachusetts Department of Elementary and Secondary Education (DESE)](https://www.doe.mass.edu/covid19/positive-cases/)
+      * [CovidActNow Data API](https://covidactnow.org/data-api)
+    ")
+  )
 )
 
 server <- function(input, output) {
@@ -71,7 +93,6 @@ server <- function(input, output) {
       geom_point(aes(color = school)) + geom_line(aes(color = school))
   })
 
-  # df.uni <- df[! df$school %in% publicSchools,]
   correlationData <- reactive({
     tmp_df <- universityCasesData()[, which(
         names(universityCasesData()) %in% c(
