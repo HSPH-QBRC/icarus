@@ -41,21 +41,26 @@ ui <- fluidPage(
   titlePanel("ICARUS dashboard"),
 
   fluidRow(
+    column(12, plotOutput("universityCasesPlot")),
+  ),
+  fluidRow(
     column(1, checkboxGroupInput("schools", "Schools:", institutions,
-                                 selected = "Harvard")),
-    column(8, plotOutput("universityCasesPlot")),
-    column(3, plotOutput("pairwiseCorrelations"))
+                                  selected = "Harvard")),
+    column(7, tableOutput("correlationCoefficients")),
+    column(4, plotOutput("pairwiseCorrelations")),
   ),
 
   fluidRow(
-    column(2, radioButtons("school", "Schools:", universities,
-                           selected = "Harvard")),
-    column(8, plotOutput("universityAreaCasesPlot")),
-    column(2, radioButtons("area", "Surrounding areas:",
+    column(12, plotOutput("universityAreaCasesPlot")),
+  ),
+  fluidRow(
+    column(6, radioButtons("school", "Schools:", universities,
+                           selected = "Harvard", inline = TRUE)),
+    column(6, radioButtons("area", "Surrounding areas:",
                            c("Metro" = "metro_positive",
                              "County" = "county_positive",
-                             "State" = "state_positive"))),
-  )
+                             "State" = "state_positive"), inline = TRUE)),
+  ),
 )
 
 server <- function(input, output) {
@@ -79,11 +84,15 @@ server <- function(input, output) {
     )) {
       tmp_df[, n] <- log(tmp_df[, n] + 1)
     }
-    return(tmp_df)
+    return(tmp_df[,-1])
   })
 
   output$pairwiseCorrelations <- renderPlot({
     ggcorr(correlationData())
+  })
+
+  output$correlationCoefficients <- renderTable({
+    cor(correlationData())
   })
 
   output$universityAreaCasesPlot <- renderPlot({
