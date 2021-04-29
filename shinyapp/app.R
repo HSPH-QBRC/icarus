@@ -43,14 +43,23 @@ ui <- navbarPage(
   "ICARUS dashboard",
   tabPanel(
     "Schools",
-    fluidRow(
-      column(12, plotOutput("universityCasesPlot")),
-    ),
-    fluidRow(
-      column(1, checkboxGroupInput("schools", "Schools:", institutions,
-                                    selected = "Harvard")),
-      column(8, tableOutput("correlationCoefficients")),
-      column(3, plotOutput("pairwiseCorrelations")),
+    sidebarLayout(
+      sidebarPanel(
+        checkboxGroupInput("schools", "Schools:", institutions,
+                           selected = "Harvard"),
+        width = 3
+      ),
+      mainPanel(
+        tabsetPanel(
+          tabPanel("Cases", plotOutput("universityCasesPlot")),
+          tabPanel(
+            "Correlations",
+            tableOutput("correlationCoefficients"),
+            plotOutput("pairwiseCorrelations")
+          )
+        ),
+        width = 9
+      )
     ),
     markdown("
     Case Density: the number of cases per 100k population calculated using a 7-day rolling average.
@@ -58,17 +67,20 @@ ui <- navbarPage(
   ),
   tabPanel(
     "Areas",
-    fluidRow(
-      column(12, plotOutput("universityAreaCasesPlot")),
-    ),
-    fluidRow(
-      column(6, radioButtons("school", "Schools:", universities,
-                             selected = "Harvard", inline = TRUE)),
-      column(6, radioButtons("area", "Surrounding areas:",
-                             c("Metro" = "metro_positive",
-                               "County" = "county_positive",
-                               "State" = "state_positive"), inline = TRUE)),
-    ),
+    sidebarLayout(
+      sidebarPanel(
+        radioButtons("school", "Schools:", universities, selected = "Harvard"),
+        radioButtons("area", "Surrounding areas:",
+                     c("Metro" = "metro_positive",
+                       "County" = "county_positive",
+                       "State" = "state_positive")),
+        width = 3
+      ),
+      mainPanel(
+        plotOutput("universityAreaCasesPlot"),
+        width = 9
+      )
+    )
   ),
   tabPanel(
     "Miscellaneous",
