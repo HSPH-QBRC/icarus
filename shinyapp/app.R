@@ -51,14 +51,32 @@ ui <- navbarPage(
       ),
       mainPanel(
         tabsetPanel(
-          tabPanel("Cases", plotOutput("universityCasesPlot")),
+          tabPanel(
+            "Cases",
+            plotOutput("universityCasesPlot"),
+            markdown(
+              "The data was normalized to [ISO week](https://en.wikipedia.org/wiki/ISO_week_date) (starts on Monday). Daily data was aggregated over the time period to become weekly. We defined the Boston area public schools as the districts of:
+* Arlington
+* Boston
+* Brookline
+* Cambridge
+* Chelsea
+* Everett
+* Malden
+* Medford
+* Newton
+* Quincy
+* Somerville
+* Watertown"
+            )
+          ),
           tabPanel(
             "Correlations",
             tableOutput("correlationCoefficients"),
             plotOutput("pairwiseCorrelations"),
-            markdown("
-              Case Density: the number of cases per 100k population calculated using a 7-day rolling average.
-            "),
+            markdown(
+              "Case Density: the number of cases per 100k population calculated using a 7-day rolling average. Local area data has been split by county, state, and metro area."
+            ),
           )
         ),
         width = 9
@@ -78,6 +96,33 @@ ui <- navbarPage(
       ),
       mainPanel(
         plotOutput("universityAreaCasesPlot"),
+        markdown(
+          "The following relates the school with their corresponding local area:
+* Boston College
+	* county: Middlesex
+	* state: MA
+	* metro: Boston-Cambridge-Newton, MA-NH
+* Columbia
+	* county: New York
+	* state: NY
+	* metro: New York-Newark-Jersey City, NY-NJ-PA
+* Dartmouth
+	* county: Grafton
+	* state: NH
+	* metro: Lebanon, NH-VT
+* Harvard
+	* county: Middlesex
+	* state: MA
+	* metro: Boston-Cambridge-Newton, MA-NH
+* Northeastern
+	* county: Suffolk
+	* state: MA
+	* metro: Boston-Cambridge-Newton, MA-NH
+* Princeton
+	* county: Mercer
+	* state: NJ
+	* metro: Trenton, NJ"
+        ),
         width = 9
       )
     )
@@ -127,7 +172,7 @@ server <- function(input, output) {
 
   output$universityAreaCasesPlot <- renderPlot({
     ggplot(df[df$school %in% input$school,], aes(week, !!sym(input$area))) +
-      geom_line()
+      geom_line() + aes(week, positive)
   }, res = 96)
 
 }
