@@ -55,15 +55,15 @@ ui <- navbarPage(
           tabPanel(
             "Correlations",
             tableOutput("correlationCoefficients"),
-            plotOutput("pairwiseCorrelations")
+            plotOutput("pairwiseCorrelations"),
+            markdown("
+              Case Density: the number of cases per 100k population calculated using a 7-day rolling average.
+            "),
           )
         ),
         width = 9
       )
     ),
-    markdown("
-    Case Density: the number of cases per 100k population calculated using a 7-day rolling average.
-    ")
   ),
   tabPanel(
     "Areas",
@@ -83,11 +83,11 @@ ui <- navbarPage(
     )
   ),
   tabPanel(
-    "Miscellaneous",
+    "Other",
     markdown("
       Additional resources:
-      * [Radiant app](https://ivyplus.shinyapps.io/radiant)
-      * [Analysis report](https://ivyplus.shinyapps.io/icarus-report)
+      * [Radiant app](https://ivyplus.shinyapps.io/radiant): a powerful GUI statistical analysis tool for the ICARUS data
+      * [Analysis report](https://ivyplus.shinyapps.io/icarus-report): an example pilot analysis of the analysis capabilities provided by the ICARUS data platform
       
       Data sources:
       * University COVID-19 dashboards
@@ -103,7 +103,7 @@ server <- function(input, output) {
   output$universityCasesPlot <- renderPlot({
     ggplot(universityCasesData(), aes(week, positive)) +
       geom_point(aes(color = school)) + geom_line(aes(color = school))
-  })
+  }, res = 96)
 
   correlationData <- reactive({
     tmp_df <- universityCasesData()[, which(
@@ -120,7 +120,7 @@ server <- function(input, output) {
     return(tmp_df[,-1])
   })
 
-  output$pairwiseCorrelations <- renderPlot(ggcorr(correlationData()))
+  output$pairwiseCorrelations <- renderPlot(ggcorr(correlationData()), res = 96)
 
   output$correlationCoefficients <- renderTable(cor(correlationData()),
                                                 rownames = TRUE)
@@ -128,7 +128,7 @@ server <- function(input, output) {
   output$universityAreaCasesPlot <- renderPlot({
     ggplot(df[df$school %in% input$school,], aes(week, !!sym(input$area))) +
       geom_line()
-  })
+  }, res = 96)
 
 }
 
