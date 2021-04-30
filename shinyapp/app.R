@@ -172,7 +172,7 @@ server <- function(input, output) {
 
   output$universityAreaCasesPlot <- renderPlot({
     ggplot(df[df$school %in% input$school,], aes(week, !!sym(input$area))) +
-      geom_line() + aes(week, positive)
+      geom_line()
   }, res = 96)
 
 }
