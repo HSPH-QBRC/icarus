@@ -188,18 +188,18 @@ server <- function(input, output) {
 
   output$universityAreaCasesPlot <- renderPlot(
     { 
-      df.school_date_filtered <- df[df$school %in% input$school & df$week >= input$datesrange[1] & df$week <= input$datesrange[2], ]
+      dfFilteredSchoolDate <- df[df$school %in% input$school & df$week >= input$datesrange[1] & df$week <= input$datesrange[2], ]
       ggplot(
         rbind(
           data.frame(
-            week = df.school_date_filtered$week,
-            value = df.school_date_filtered$positive,
-            fct = rep("school", length(df.school_date_filtered$week))
+            week = dfFilteredSchoolDate$week,
+            value = dfFilteredSchoolDate$positive,
+            fct = rep("school", length(dfFilteredSchoolDate$week))
           ),
           data.frame(
-            week = df.school_date_filtered$week,
-            value = df.school_date_filtered[, toString(sym(input$area))],
-            fct = rep("area", length(df.school_date_filtered$week))
+            week = dfFilteredSchoolDate$week,
+            value = dfFilteredSchoolDate[, toString(sym(input$area))],
+            fct = rep("area", length(dfFilteredSchoolDate$week))
           )
         )
       ) + geom_line(
