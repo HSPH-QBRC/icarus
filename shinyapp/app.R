@@ -88,10 +88,26 @@ ui <- navbarPage(
     sidebarLayout(
       sidebarPanel(
         radioButtons("school", "Schools:", universities, selected = "Harvard"),
-        radioButtons("area", "Surrounding areas:",
-                     c("Metro" = "metro_positive",
-                       "County" = "county_positive",
-                       "State" = "state_positive")),
+        radioButtons(
+          "area", 
+          "Surrounding areas:",
+          c(
+            "Metro" = "metro_positive",
+            "County" = "county_positive",
+            "State" = "state_positive"
+          ),
+        ),
+        sliderInput(
+          "datesrange",
+          "Dates:",
+          min = min(df$week[!is.na(df$week)]),
+          max = max(df$week[!is.na(df$week)]),
+          value = c(
+            min(df$week[!is.na(df$week)]),
+            max(df$week[!is.na(df$week)])
+          ),
+          dragRange = T
+        ),
         width = 3
       ),
       mainPanel(
@@ -170,10 +186,28 @@ server <- function(input, output) {
   output$correlationCoefficients <- renderTable(cor(correlationData()),
                                                 rownames = TRUE)
 
-  output$universityAreaCasesPlot <- renderPlot({
-    ggplot(df[df$school %in% input$school,], aes(week, !!sym(input$area))) +
-      geom_line()
-  }, res = 96)
+  output$universityAreaCasesPlot <- renderPlot(
+    { 
+      df.flt <- df[df$school %in% input$school & df$week >= input$datesrange[1] & df$week <= input$datesrange[2], ]
+      ggplot(
+        rbind(
+          data.frame(
+            week = df.flt$week,
+            value = df.flt$positive,
+            fct = rep("school", length(df.flt$week))
+          ),
+          data.frame(
+            week = df.flt$week,
+            value = df.flt[, toString(sym(input$area))],
+            fct = rep("area", length(df.flt$week))
+          )
+        )
+      ) + geom_line(
+        aes(week, value, color = fct)
+      ) + facet_wrap(~fct, scales = "free", ncol = 1) + theme(legend.position="none")
+    },
+    res = 96
+  )
 
 }
 
