@@ -88,10 +88,26 @@ ui <- navbarPage(
     sidebarLayout(
       sidebarPanel(
         radioButtons("school", "Schools:", universities, selected = "Harvard"),
-        radioButtons("area", "Surrounding areas:",
-                     c("Metro" = "metro_positive",
-                       "County" = "county_positive",
-                       "State" = "state_positive")),
+        radioButtons(
+          "area", 
+          "Surrounding areas:",
+          c(
+            "Metro" = "metro_positive",
+            "County" = "county_positive",
+            "State" = "state_positive"
+          ),
+        ),
+        sliderInput(
+          "datesrange",
+          "Dates:",
+          min = min(df$week[!is.na(df$week)]),
+          max = max(df$week[!is.na(df$week)]),
+          value = c(
+            min(df$week[!is.na(df$week)]),
+            max(df$week[!is.na(df$week)])
+          ),
+          dragRange = T
+        ),
         width = 3
       ),
       mainPanel(
@@ -170,10 +186,28 @@ server <- function(input, output) {
   output$correlationCoefficients <- renderTable(cor(correlationData()),
                                                 rownames = TRUE)
 
-  output$universityAreaCasesPlot <- renderPlot({
-    ggplot(df[df$school %in% input$school,], aes(week, !!sym(input$area))) +
-      geom_line()
-  }, res = 96)
+  output$universityAreaCasesPlot <- renderPlot(
+    { 
+      dfFilteredSchoolDate <- df[df$school %in% input$school & df$week >= input$datesrange[1] & df$week <= input$datesrange[2], ]
+      ggplot(
+        rbind(
+          data.frame(
+            week = dfFilteredSchoolDate$week,
+            value = dfFilteredSchoolDate$positive,
+            fct = rep("school", length(dfFilteredSchoolDate$week))
+          ),
+          data.frame(
+            week = dfFilteredSchoolDate$week,
+            value = dfFilteredSchoolDate[, input$area],
+            fct = rep("area", length(dfFilteredSchoolDate$week))
+          )
+        )
+      ) + geom_line(
+        aes(week, value, color = fct)
+      ) + facet_wrap(~fct, scales = "free", ncol = 1) + theme(legend.position="none")
+    },
+    res = 96
+  )
 
 }
 
