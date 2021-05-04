@@ -122,7 +122,8 @@ ui <- navbarPage(
           )
         ),
         markdown(
-          "The following relates the school with their corresponding local area:
+          "### Data providence
+The following relates the school with their corresponding local area:
 * Boston College
 	* county: Middlesex
 	* state: MA
