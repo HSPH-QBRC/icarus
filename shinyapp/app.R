@@ -92,9 +92,9 @@ ui <- navbarPage(
           "area", 
           "Surrounding areas:",
           c(
-            "Metro" = "metro_positive",
-            "County" = "county_positive",
-            "State" = "state_positive"
+            "Metro" = "metro",
+            "County" = "county",
+            "State" = "state"
           ),
         ),
         sliderInput(
@@ -111,7 +111,16 @@ ui <- navbarPage(
         width = 3
       ),
       mainPanel(
-        plotOutput("universityAreaCasesPlot"),
+        tabsetPanel(
+          tabPanel(
+            "Cases",
+            plotOutput("universityAreaCasesPlot")
+          ),
+          tabPanel(
+            "Vaccinations",
+            plotOutput("universityAreaVaccinesPlot")
+          )
+        ),
         markdown(
           "The following relates the school with their corresponding local area:
 * Boston College
@@ -139,45 +148,6 @@ ui <- navbarPage(
 	* state: NJ
 	* metro: Trenton, NJ"
         ),
-        width = 9
-      )
-    )
-  ),
-  tabPanel(
-    "Area Vaccinations",
-    sidebarLayout(
-      sidebarPanel(
-        radioButtons(
-          "vaccineSchool",
-          "Schools:",
-          universities,
-          selected = "Harvard"
-        ),
-        radioButtons(
-          "vaccineArea",
-          "Surrounding areas:",
-          c(
-            "Metro" = "metro_vaccine",
-            "County" = "county_vaccine",
-            "State" = "state_vaccine"
-          ),
-          selected = "County"
-        ),
-        sliderInput(
-          "vaccinesdatesrange",
-          "Dates:",
-          min = min(df$week[!is.na(df$week)]),
-          max = max(df$week[!is.na(df$week)]),
-          value = c(
-            min(df$week[!is.na(df$week)]),
-            max(df$week[!is.na(df$week)])
-          ),
-          dragRange = T
-        ),
-        width = 3
-      ),
-      mainPanel(
-        plotOutput("universityAreaVaccinesPlot"),
         width = 9
       )
     )
@@ -228,6 +198,14 @@ server <- function(input, output) {
   output$universityAreaCasesPlot <- renderPlot(
     { 
       dfFilteredSchoolDate <- df[df$school %in% input$school & df$week >= input$datesrange[1] & df$week <= input$datesrange[2], ]
+      casesArea <- switch(
+        input$area,
+        metro = "metro_positive",
+        county = "county_positive",
+        state = "state_positive",
+        "metro_positive"
+      )
+
       ggplot(
         rbind(
           data.frame(
@@ -237,7 +215,7 @@ server <- function(input, output) {
           ),
           data.frame(
             week = dfFilteredSchoolDate$week,
-            value = dfFilteredSchoolDate[, input$area],
+            value = dfFilteredSchoolDate[, casesArea],
             fct = rep("area", length(dfFilteredSchoolDate$week))
           )
         )
@@ -251,23 +229,17 @@ server <- function(input, output) {
   output$universityAreaVaccinesPlot <- renderPlot(
     { 
       dfVaccinesFilteredSchoolDate <- df[
-        df$school %in% input$vaccineSchool 
-        & df$week >= input$vaccinesdatesrange[1] 
-        & df$week <= input$vaccinesdatesrange[2], 
+        df$school %in% input$school 
+        & df$week >= input$datesrange[1] 
+        & df$week <= input$datesrange[2], 
       ]
-      dfVaccinesFilteredSchoolDateFaceted <- 
-      
-      foo <- data.frame(
-        week = dfVaccinesFilteredSchoolDate$week,
-        value = dfVaccinesFilteredSchoolDate$positive,
-        fct = rep("area", length(dfVaccinesFilteredSchoolDate$week))
+      vaccineArea <- switch(
+        input$area,
+        metro = "metro_vaccine",
+        county = "county_vaccine",
+        state = "state_vaccine",
+        "metro_vaccine"
       )
-      foo2 <- data.frame(
-        week = dfVaccinesFilteredSchoolDate$week,
-        value = dfVaccinesFilteredSchoolDate[, input$vaccineArea],
-        fct = rep("area", length(dfVaccinesFilteredSchoolDate$week))
-      )
-      browser()
       ggplot(
         rbind(
           na.omit(
@@ -280,7 +252,7 @@ server <- function(input, output) {
           na.omit(
             data.frame(
               week = dfVaccinesFilteredSchoolDate$week,
-              value = dfVaccinesFilteredSchoolDate[, input$vaccineArea],
+              value = dfVaccinesFilteredSchoolDate[, vaccineArea],
               fct = rep("area", length(dfVaccinesFilteredSchoolDate$week))
             )
           )
