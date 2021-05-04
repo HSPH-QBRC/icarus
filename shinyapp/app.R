@@ -125,7 +125,14 @@ background noise."),
           ),
           tabPanel(
             "Vaccinations",
-            plotOutput("universityAreaVaccinesPlot")
+            plotOutput("universityAreaVaccinesPlot"),
+            markdown("### Cross correlation
+The cross correlation identifies time lag of the university's positive test 
+counts and the chosen area vaccine metric - based on weekly data. For example, a peak 
+at 0 indicates that there is no time lag between the university testing results and area
+vaccination data. The blue hashed lines indicate the 95% confidence interval for 
+background noise."),
+            plotOutput("universityAreaVaccinesCCFPlot")
           )
         ),
         markdown(
@@ -261,7 +268,39 @@ server <- function(input, output) {
         df.for_ccf[, caseArea],
         main = "",
         ylab = "Correlation",
-        xlab = "Lab (weeks)"
+        xlab = "Lag (weeks)"
+      )
+    }
+  )
+
+  output$universityAreaVaccinesCCFPlot <- renderPlot(
+    {
+      # should probably make this reactive.
+      dfCasesFilteredSchoolDate <- df[
+          df$school %in% input$school 
+          & df$week >= input$datesrange[1] 
+          & df$week <= input$datesrange[2], 
+        ]
+      caseArea <- switch(
+          input$area,
+          metro = "metro_vaccine",
+          county = "county_vaccine",
+          state = "state_vaccine",
+          "metro_vaccine"
+      )
+      # Create a temporary data-frame for the outputs
+      df.for_ccf <- data.frame(
+        positive = dfCasesFilteredSchoolDate$positive,
+        placeholder = dfCasesFilteredSchoolDate[, caseArea]
+      )
+      colnames(df.for_ccf)[colnames(df.for_ccf) == "placeholder"] <- caseArea
+      df.for_ccf <- na.omit(df.for_ccf)
+      ccf(
+        df.for_ccf$positive,
+        df.for_ccf[, caseArea],
+        main = "",
+        ylab = "Correlation",
+        xlab = "Lag (weeks)"
       )
     }
   )
