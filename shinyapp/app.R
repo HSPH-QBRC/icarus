@@ -198,7 +198,7 @@ server <- function(input, output) {
           ),
           data.frame(
             week = dfFilteredSchoolDate$week,
-            value = dfFilteredSchoolDate[, toString(sym(input$area))],
+            value = dfFilteredSchoolDate[, input$area],
             fct = rep("area", length(dfFilteredSchoolDate$week))
           )
         )
