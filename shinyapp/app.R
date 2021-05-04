@@ -144,6 +144,45 @@ ui <- navbarPage(
     )
   ),
   tabPanel(
+    "Area Vaccinations",
+    sidebarLayout(
+      sidebarPanel(
+        radioButtons(
+          "vaccineSchool",
+          "Schools:",
+          universities,
+          selected = "Harvard"
+        ),
+        radioButtons(
+          "vaccineArea",
+          "Surrounding areas:",
+          c(
+            "Metro" = "metro_vaccine",
+            "County" = "county_vaccine",
+            "State" = "state_vaccine"
+          ),
+          selected = "County"
+        ),
+        sliderInput(
+          "vaccinesdatesrange",
+          "Dates:",
+          min = min(df$week[!is.na(df$week)]),
+          max = max(df$week[!is.na(df$week)]),
+          value = c(
+            min(df$week[!is.na(df$week)]),
+            max(df$week[!is.na(df$week)])
+          ),
+          dragRange = T
+        ),
+        width = 3
+      ),
+      mainPanel(
+        plotOutput("universityAreaVaccinesPlot"),
+        width = 9
+      )
+    )
+  ),
+  tabPanel(
     "Other",
     markdown("
       Additional resources:
@@ -200,6 +239,50 @@ server <- function(input, output) {
             week = dfFilteredSchoolDate$week,
             value = dfFilteredSchoolDate[, input$area],
             fct = rep("area", length(dfFilteredSchoolDate$week))
+          )
+        )
+      ) + geom_line(
+        aes(week, value, color = fct)
+      ) + facet_wrap(~fct, scales = "free", ncol = 1) + theme(legend.position="none")
+    },
+    res = 96
+  )
+
+  output$universityAreaVaccinesPlot <- renderPlot(
+    { 
+      dfVaccinesFilteredSchoolDate <- df[
+        df$school %in% input$vaccineSchool 
+        & df$week >= input$vaccinesdatesrange[1] 
+        & df$week <= input$vaccinesdatesrange[2], 
+      ]
+      dfVaccinesFilteredSchoolDateFaceted <- 
+      
+      foo <- data.frame(
+        week = dfVaccinesFilteredSchoolDate$week,
+        value = dfVaccinesFilteredSchoolDate$positive,
+        fct = rep("area", length(dfVaccinesFilteredSchoolDate$week))
+      )
+      foo2 <- data.frame(
+        week = dfVaccinesFilteredSchoolDate$week,
+        value = dfVaccinesFilteredSchoolDate[, input$vaccineArea],
+        fct = rep("area", length(dfVaccinesFilteredSchoolDate$week))
+      )
+      browser()
+      ggplot(
+        rbind(
+          na.omit(
+            data.frame(
+              week = dfVaccinesFilteredSchoolDate$week,
+              value = dfVaccinesFilteredSchoolDate$positive,
+              fct = rep("school", length(dfVaccinesFilteredSchoolDate$week))
+            )
+          ),
+          na.omit(
+            data.frame(
+              week = dfVaccinesFilteredSchoolDate$week,
+              value = dfVaccinesFilteredSchoolDate[, input$vaccineArea],
+              fct = rep("area", length(dfVaccinesFilteredSchoolDate$week))
+            )
           )
         )
       ) + geom_line(
