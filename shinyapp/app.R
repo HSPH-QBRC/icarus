@@ -202,7 +202,8 @@ The following relates the school with their corresponding local area:
       ),
       mainPanel(
         plotOutput("xycomparison"),
-        plotOutput("xyscatterplot")
+        plotOutput("xyscatterplot"),
+        htmlOutput("xycorrelation")
       )
     )
   ),
@@ -423,6 +424,35 @@ server <- function(input, output) {
       ) + geom_point(
         aes(x, y)
       ) + labs(x = input$xgroup, y = input$ygroup)
+    }
+  )
+
+  output$xycorrelation <- renderText(
+    {
+      dfFilteredSchool <- df[df$school %in% input$schoolsscat & df$week >= input$datesrangescat[1] & df$week <= input$datesrangescat[2], ]
+      xycorr.pearson <- cor(
+        dfFilteredSchool[, input$xgroup],
+        dfFilteredSchool[, input$ygroup],
+        method = "pearson",
+        use = "complete.obs"
+      )
+      xycorr.spearman <- cor(
+        dfFilteredSchool[, input$xgroup],
+        dfFilteredSchool[, input$ygroup],
+        method = "spearman",
+        use = "complete.obs"
+      )
+      corrTextOutput <- paste(
+          "The correlations of<b>",
+          input$xgroup,
+          "</b>and<b>",
+          input$ygroup,
+          "</b>is:<br><b>Pearson:</b>",
+          round(xycorr.pearson, digits = 2),
+          "<br><b>Spearman:</b>",
+          round(xycorr.spearman, digits = 2)
+        )
+      corrTextOutput
     }
   )
 
