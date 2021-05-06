@@ -168,6 +168,45 @@ The following relates the school with their corresponding local area:
     )
   ),
   tabPanel(
+    "Correlations",
+    sidebarLayout(
+      sidebarPanel(
+        checkboxGroupInput(
+          "schoolsscat",
+          "Schools:",
+          institutions,
+          select = "Harvard"
+        ),
+        selectInput(
+          "xgroup",
+          "X axis",
+          colnames(df)[! colnames(df) %in% c("school", "week")]
+        ),
+        selectInput(
+          "ygroup",
+          "Y axis",
+          colnames(df)[! colnames(df) %in% c("school", "week")]
+        ),
+        sliderInput(
+          "datesrangescat",
+          "Dates:",
+          min = min(df$week[!is.na(df$week)]),
+          max = max(df$week[!is.na(df$week)]),
+          value = c(
+            min(df$week[!is.na(df$week)]),
+            max(df$week[!is.na(df$week)])
+          ),
+          dragRange = T
+        ),
+        width = 3
+      ),
+      mainPanel(
+        plotOutput("xycomparison"),
+        plotOutput("xyscatterplot")
+      )
+    )
+  ),
+  tabPanel(
     "Other",
     markdown("
       Additional resources:
@@ -341,6 +380,50 @@ server <- function(input, output) {
       ) + facet_wrap(~fct, scales = "free", ncol = 1) + theme(legend.position="none")
     },
     res = 96
+  )
+
+  output$xycomparison <- renderPlot(
+    {
+      dfFilteredSchool <- df[df$school %in% input$schoolsscat & df$week >= input$datesrangescat[1] & df$week <= input$datesrangescat[2], ]
+      # Can't get ggplot to accept input$xgroup with dfFilteredSchool, 
+      # so resorting to this.
+      dfForCompare <- rbind(
+        na.omit(
+          data.frame(
+            week = dfFilteredSchool$week,
+            value = dfFilteredSchool[, input$xgroup],
+            fct = rep(input$xgroup, length(dfFilteredSchool$week))
+          )
+        ),
+        na.omit(
+          data.frame(
+            week = dfFilteredSchool$week,
+            value = dfFilteredSchool[, input$ygroup],
+            fct = rep(input$ygroup, length(dfFilteredSchool$week))
+          )
+        )
+      )
+      ggplot(dfForCompare) + geom_line(aes(week, value, color = fct)) + facet_wrap(
+        ~fct, scales = "free", ncol = 2
+      ) + theme(legend.position="none")
+    }
+  )
+
+  output$xyscatterplot <- renderPlot(
+    {
+      dfFilteredSchool <- df[df$school %in% input$schoolsscat & df$week >= input$datesrangescat[1] & df$week <= input$datesrangescat[2], ]
+      # Can't get ggplot to accept input$xgroup with dfFilteredSchool, 
+      # so resorting to this.
+      dfForScatter <- data.frame(
+        x = dfFilteredSchool[, input$xgroup],
+        y = dfFilteredSchool[, input$ygroup]
+      )
+      ggplot(
+        dfForScatter
+      ) + geom_point(
+        aes(x, y)
+      ) + labs(x = input$xgroup, y = input$ygroup)
+    }
   )
 
 }
