@@ -393,18 +393,20 @@ server <- function(input, output) {
           data.frame(
             week = dfFilteredSchool$week,
             value = dfFilteredSchool[, input$xgroup],
-            fct = rep(input$xgroup, length(dfFilteredSchool$week))
+            fct = rep(input$xgroup, length(dfFilteredSchool$week)),
+            school = dfFilteredSchool$school
           )
         ),
         na.omit(
           data.frame(
             week = dfFilteredSchool$week,
             value = dfFilteredSchool[, input$ygroup],
-            fct = rep(input$ygroup, length(dfFilteredSchool$week))
+            fct = rep(input$ygroup, length(dfFilteredSchool$week)),
+            school = dfFilteredSchool$school
           )
         )
       )
-      ggplot(dfForCompare) + geom_line(aes(week, value, color = fct)) + facet_wrap(
+      ggplot(dfForCompare) + geom_point(aes(week, value, color = school)) + facet_wrap(
         ~fct, scales = "free", ncol = 2
       ) + theme(legend.position="none")
     }
@@ -417,12 +419,13 @@ server <- function(input, output) {
       # so resorting to this.
       dfForScatter <- data.frame(
         x = dfFilteredSchool[, input$xgroup],
-        y = dfFilteredSchool[, input$ygroup]
+        y = dfFilteredSchool[, input$ygroup],
+        school = dfFilteredSchool$school
       )
       ggplot(
         dfForScatter
       ) + geom_point(
-        aes(x, y)
+        aes(x, y, color = school)
       ) + labs(x = input$xgroup, y = input$ygroup)
     }
   )
