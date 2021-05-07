@@ -310,7 +310,7 @@ server <- function(input, output) {
         ylab = "Correlation",
         xlab = "Lag (weeks)"
       )
-    }
+    }, res = 96
   )
 
   output$universityAreaVaccinesCCFPlot <- renderPlot(
@@ -342,7 +342,7 @@ server <- function(input, output) {
         ylab = "Correlation",
         xlab = "Lag (weeks)"
       )
-    }
+    }, res = 96
   )
 
   output$universityAreaVaccinesPlot <- renderPlot(
@@ -409,7 +409,7 @@ server <- function(input, output) {
       ggplot(dfForCompare) + geom_point(aes(week, value, color = school)) + facet_wrap(
         ~fct, scales = "free", ncol = 2
       ) + theme(legend.position="none")
-    }
+    }, res = 96
   )
 
   output$xyscatterplot <- renderPlot(
@@ -427,7 +427,7 @@ server <- function(input, output) {
       ) + geom_point(
         aes(x, y, color = school)
       ) + labs(x = input$xgroup, y = input$ygroup)
-    }
+    }, res = 96
   )
 
   output$xycorrelation <- renderText(
