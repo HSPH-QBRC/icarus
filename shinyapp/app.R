@@ -208,6 +208,40 @@ The following relates the school with their corresponding local area:
     )
   ),
   tabPanel(
+    "Query Table",
+    sidebarLayout(
+      sidebarPanel(
+        checkboxGroupInput(
+          "schoolsquery",
+          "Schools:",
+          institutions,
+          select = "Harvard"
+        ),
+        checkboxGroupInput(
+          "featurequery",
+          "Features:",
+          colnames(df),
+          select = c("school", "positive")
+        ),
+        sliderInput(
+          "datesrangequery",
+          "Dates:",
+          min = min(df$week[!is.na(df$week)]),
+          max = max(df$week[!is.na(df$week)]),
+          value = c(
+            min(df$week[!is.na(df$week)]),
+            max(df$week[!is.na(df$week)])
+          ),
+          dragRange = T
+        ),
+        width = 3
+      ),
+      mainPanel(
+        dataTableOutput("queryTable")
+      )
+    )
+  ),
+  tabPanel(
     "Other",
     markdown("
       Additional resources:
@@ -457,6 +491,18 @@ server <- function(input, output) {
         )
       corrTextOutput
     }
+  )
+
+  output$queryTable <- renderDataTable(
+    {
+      dfFilteredQuery <- df[df$school %in% input$schoolsquery & df$week >= input$datesrangequery[1] & df$week <= input$datesrangequery[2], ]
+      dfFilteredQuery <- dfFilteredQuery[, colnames(dfFilteredQuery) %in% input$featurequery]
+      dfFilteredQuery <- na.omit(dfFilteredQuery)
+      return(dfFilteredQuery)
+    },
+    options = list(
+      pageLength = 10
+    )
   )
 
 }
