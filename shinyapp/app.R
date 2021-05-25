@@ -5,10 +5,9 @@ library(httr)
 library(jsonlite)
 
 loadData <- function() {
-  # get JSON data from ISO weeks REST API and return as a data frame
-  response = GET("https://webhooks.mongodb-realm.com/api/client/v2.0/app/dev-icarus-mzcsi/service/export/incoming_webhook/isoweeks")
-  data = fromJSON(rawToChar(response$content))
-  return(data)
+  # get CSV data from ISO weeks REST API and return as a data frame
+  response = GET("https://webhooks.mongodb-realm.com/api/client/v2.0/app/dev-icarus-mzcsi/service/export/incoming_webhook/isoweeks?format=csv")
+  return(content(response))
 }
 
 df <- loadData()
