@@ -2,12 +2,12 @@ library(shiny)
 library(ggplot2)
 library(GGally)
 library(httr)
-library(jsonlite)
+library(readr)
 
 loadData <- function() {
   # get CSV data from ISO weeks REST API and return as a data frame
   response = GET("https://webhooks.mongodb-realm.com/api/client/v2.0/app/dev-icarus-mzcsi/service/export/incoming_webhook/isoweeks?format=csv")
-  return(content(response))
+  return(as.data.frame(content(response)))
 }
 
 df <- loadData()
