@@ -24,6 +24,13 @@
             "state": "NH"
         },
         {
+            "name": "Duke",
+            "collection": "duke",
+            "metro": "Durham-Chapel Hill, NC",
+            "county": "Durham",
+            "state": "NC"
+        },
+        {
             "name": "Harvard",
             "collection": "harvard",
             "metro": "Boston-Cambridge-Newton, MA-NH",
