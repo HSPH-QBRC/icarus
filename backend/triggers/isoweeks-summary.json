@@ -1,0 +1,10 @@
+{
+    "id": "60afaa704754d4793d0e7feb",
+    "name": "isoweeks-summary",
+    "type": "SCHEDULED",
+    "config": {
+        "schedule": "30 15 * * *"
+    },
+    "function_name": "summarizeByWeek",
+    "disabled": false
+}
