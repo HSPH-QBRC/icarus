@@ -4,31 +4,13 @@ library(GGally)
 library(MASS)
 library(jtools)
 library(reshape2)
-library(mongolite)
-
-options(mongodb = list(
-    "host" = Sys.getenv("MONGODB_HOSTNAME"),
-    "username" = Sys.getenv("MONGODB_USERNAME"),
-    "password" = Sys.getenv("MONGODB_PASSWORD")
-))
-databaseName <- "covid"
-collectionName <- "allTestingData"
+library(httr)
+library(readr)
 
 loadData <- function() {
-  # Connect to the database
-  db <- mongo(
-    collection = collectionName,
-    url = sprintf(
-      "mongodb+srv://%s:%s@%s/%s?retryWrites=true&w=majority",
-      options()$mongodb$username,
-      options()$mongodb$password,
-      options()$mongodb$host,
-      databaseName
-    )
-  )
-  # Read all the entries
-  data <- db$find()
-  data
+  # get CSV data from ISO weeks REST API and return as a data frame
+  response = GET("https://webhooks.mongodb-realm.com/api/client/v2.0/app/dev-icarus-mzcsi/service/export/incoming_webhook/isoweeks?format=csv")
+  return(as.data.frame(content(response)))
 }
 
 df <- loadData()
@@ -75,10 +57,10 @@ df.compare <- df.boston[, which(
 )]
 df.compare[, 3] <- log(df.compare[,3] + 1)
 df.cast <- dcast(
-  df.compare, 
-  week ~ school, 
-  value.var = "positive", 
-  fun.aggregate = mean, 
+  df.compare,
+  week ~ school,
+  value.var = "positive",
+  fun.aggregate = mean,
   na.rm = F
 )
 
