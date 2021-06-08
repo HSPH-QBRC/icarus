@@ -15,6 +15,9 @@ loadData <- function() {
 
 df <- loadData()
 
+# convert ISO weeks to the dates of Monday of each ISO week
+df$week <- as.Date(paste0(df$week, "1"), format = "%Y%W%u")
+
 df.uni <- df[! df$school %in% c("MA public schools", "Boston-area public schools"),]
 
 tmp_df <- df.uni[, which(
@@ -30,9 +33,9 @@ for (n in c(
   tmp_df[, n] <- log(tmp_df[, n] + 1)
 }
 
-df.uni <- df.uni[,2:length(colnames(df.uni))]
 df.uni$school <- factor(df.uni$school)
 df.uni$school <- relevel(df.uni$school, ref = "Harvard")
+
 fit <- glm.nb(
   positive ~ week + total + school + county_positive + school:week + county_positive:week,
   data = df.uni
