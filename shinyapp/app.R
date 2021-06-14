@@ -9,14 +9,11 @@ library(readr)
 
 loadData <- function() {
   # get CSV data from ISO weeks REST API and return as a data frame
-  response = GET("https://webhooks.mongodb-realm.com/api/client/v2.0/app/dev-icarus-mzcsi/service/export/incoming_webhook/isoweeks?format=csv")
+  response = GET("https://webhooks.mongodb-realm.com/api/client/v2.0/app/dev-icarus-mzcsi/service/export/incoming_webhook/report")
   return(as.data.frame(content(response)))
 }
 
 df <- loadData()
-
-# convert ISO weeks to the dates of Monday of each ISO week
-df$week <- as.Date(paste0(df$week, "1"), format = "%Y%W%u")
 
 df.uni <- df[! df$school %in% c("MA public schools", "Boston-area public schools"),]
 
