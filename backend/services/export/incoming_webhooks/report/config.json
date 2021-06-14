@@ -1,0 +1,15 @@
+{
+    "id": "60c75fe4e78a8f3c3c5e8b4b",
+    "name": "report",
+    "run_as_authed_user": false,
+    "run_as_user_id": "",
+    "run_as_user_id_script_source": "",
+    "can_evaluate": {},
+    "options": {
+        "httpMethod": "GET",
+        "validationMethod": "NO_VALIDATION"
+    },
+    "respond_result": false,
+    "fetch_custom_user_data": false,
+    "create_user_on_auth": false
+}
