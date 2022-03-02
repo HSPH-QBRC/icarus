@@ -5,3 +5,7 @@
 .Renviron
 .Rhistory
 .Rproj.user
+
+.terraform/
+.vagrant/
+shibboleth/keys/

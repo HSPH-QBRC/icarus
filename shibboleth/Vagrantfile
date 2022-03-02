@@ -1,0 +1,32 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.require_version ">=2.2.19"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/centos-stream-8"
+
+  config.vm.hostname = "shib"
+
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  config.vm.network "forwarded_port", guest: 443, host: 8443
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 1024
+    vb.cpus = 2
+  end
+
+  config.vm.provision "shell",
+    inline: <<-SHELL
+      set -ex
+      #sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+      cp /vagrant/shibboleth.repo /etc/yum.repos.d/shibboleth.repo
+      dnf install -y httpd.x86_64 mod_ssl shibboleth.x86_64
+      cp /vagrant/prod-idp-metadata.xml /etc/shibboleth/prod-idp-metadata.xml
+      cp /vagrant/attribute-map.xml /etc/shibboleth/attribute-map.xml
+      systemctl enable httpd.service shibd.service --now
+      chmod +rx /var/log/httpd /var/log/shibboleth
+      systemctl disable firewalld.service --now
+    SHELL
+
+end
