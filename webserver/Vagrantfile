@@ -20,10 +20,11 @@ Vagrant.configure("2") do |config|
     inline: <<-SHELL
       set -ex
       #sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
-      cp /vagrant/webserver/shibboleth.repo /etc/yum.repos.d/shibboleth.repo
+      cp /vagrant/webserver/shibboleth.repo /etc/yum.repos.d
       dnf install -y httpd.x86_64 mod_ssl shibboleth.x86_64
-      cp /vagrant/webserver/prod-idp-metadata.xml /etc/shibboleth/prod-idp-metadata.xml
-      cp /vagrant/webserver/attribute-map.xml /etc/shibboleth/attribute-map.xml
+      cp /vagrant/webserver/prod-idp-metadata.xml /etc/shibboleth
+      cp /vagrant/webserver/attribute-map.xml /etc/shibboleth
+      cp /vagrant/webserver/shibboleth2.xml /etc/shibboleth
       systemctl enable httpd.service shibd.service --now
       chmod +rx /var/log/httpd /var/log/shibboleth
       systemctl disable firewalld.service --now
