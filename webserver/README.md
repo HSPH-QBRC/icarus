@@ -16,3 +16,12 @@ terraform init
 
 terraform workspace new dev
 ```
+
+Web server config
+```shell
+ssh -i /path/to/icarus-admin-key centos@covid.ivyplus.net
+
+sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+git clone git@github.com:HSPH-QBRC/icarus.git
+sudo cp ~/icarus/webserver/shibboleth.repo /etc/yum.repos.d/shibboleth.repo
+```

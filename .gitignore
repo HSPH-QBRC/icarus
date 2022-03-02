@@ -8,4 +8,4 @@
 
 .terraform/
 .vagrant/
-shibboleth/keys/
+webserver/keys/
