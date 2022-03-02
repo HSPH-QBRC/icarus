@@ -13,6 +13,7 @@ Folder description:
 * `backend` - MongoDB Realm app downloaded using `realm-cli export`
 * `google-princeton` - Google Apps Script downloaded using `clasp clone`
 * `shinyapp` - R Shiny app for data visualization
+* `webserver` - web server for data downloads
 
 Reference:
 * https://docs.mongodb.com/realm/deploy/export-realm-app
