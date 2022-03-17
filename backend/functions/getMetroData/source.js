@@ -7,14 +7,14 @@ exports = async function(){
       url: `${context.values.get("covidActNowApiBaseUrl")}/cbsa/${cbsaCode}.timeseries.json?apiKey=${context.values.get("covidActNowApiKey")}`
     };
     const response = await context.functions.execute("getJsonApiData", request);
-    if (response["actualsTimeseries"].length != response["metricsTimeseries"].length) {
-      throw new Error(`Number of entries in actualsTimeseries (${response["actualsTimeseries"].length}) does not match metricsTimeseries (${response["metricsTimeseries"].length})`);
+    if (response["actualsTimeseries"].length !== response["metricsTimeseries"].length) {
+      console.warn(`Number of entries in actualsTimeseries (${response["actualsTimeseries"].length}) does not match metricsTimeseries (${response["metricsTimeseries"].length})`);
     }
 
-    const updates = response["actualsTimeseries"].map((actuals, index) => {
-      metrics = response["metricsTimeseries"][index];
-      if (actuals["date"] != metrics["date"]) {
-        throw new Error(`Actuals date (${actuals["date"]}) does not match metrics date (${metrics["date"]})`);
+    const updates = response["actualsTimeseries"].map(actuals => {
+      const metrics = response["metricsTimeseries"].find(element => element["date"] === actuals["date"]);
+      if (metrics === undefined) {
+        throw new Error(`No metrics found for date: ${actuals["date"]}`);
       }
       return {
         "replaceOne": {
