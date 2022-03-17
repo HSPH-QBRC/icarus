@@ -12,7 +12,7 @@ exports = async function(){
     }
 
     const updates = response["actualsTimeseries"].map(actuals => {
-      metrics = response["metricsTimeseries"].find(element => element["date"] === actuals["date"]);
+      const metrics = response["metricsTimeseries"].find(element => element["date"] === actuals["date"]);
       if (metrics === undefined) {
         throw new Error(`No metrics found for date: ${actuals["date"]}`);
       }
