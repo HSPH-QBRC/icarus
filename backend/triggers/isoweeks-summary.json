@@ -5,6 +5,12 @@
     "config": {
         "schedule": "30 15 * * *"
     },
-    "function_name": "summarizeByWeek",
-    "disabled": false
+    "disabled": false,
+    "event_processors": {
+        "FUNCTION": {
+            "config": {
+                "function_name": "summarizeByWeek"
+            }
+        }
+    }
 }

@@ -5,6 +5,12 @@
     "config": {
         "schedule": "0 15 * * *"
     },
-    "function_name": "getCountyData",
-    "disabled": false
+    "disabled": false,
+    "event_processors": {
+        "FUNCTION": {
+            "config": {
+                "function_name": "getCountyData"
+            }
+        }
+    }
 }

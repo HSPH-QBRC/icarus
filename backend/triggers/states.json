@@ -5,6 +5,12 @@
     "config": {
         "schedule": "1 15 * * *"
     },
-    "function_name": "getStateData",
-    "disabled": false
+    "disabled": false,
+    "event_processors": {
+        "FUNCTION": {
+            "config": {
+                "function_name": "getStateData"
+            }
+        }
+    }
 }

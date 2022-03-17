@@ -5,6 +5,12 @@
     "config": {
         "schedule": "3 15 * * *"
     },
-    "function_name": "getMetroData",
-    "disabled": false
+    "disabled": false,
+    "event_processors": {
+        "FUNCTION": {
+            "config": {
+                "function_name": "getMetroData"
+            }
+        }
+    }
 }
