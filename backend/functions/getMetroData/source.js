@@ -11,7 +11,7 @@ exports = async function(){
       console.warn(`Number of entries in actualsTimeseries (${response["actualsTimeseries"].length}) does not match metricsTimeseries (${response["metricsTimeseries"].length})`);
     }
 
-    await collection.bulkWrite(response["actualsTimeseries"].map(actuals => {
+    collection.bulkWrite(response["actualsTimeseries"].map(actuals => {
       const metrics = response["metricsTimeseries"].find(element => element["date"] === actuals["date"]);
       if (metrics === undefined) {
         throw new Error(`No metrics found for date: ${actuals["date"]}`);
