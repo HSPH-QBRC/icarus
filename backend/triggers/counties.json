@@ -3,7 +3,7 @@
     "name": "counties",
     "type": "SCHEDULED",
     "config": {
-        "schedule": "0 15 * * *"
+        "schedule": "5 15 * * *"
     },
     "disabled": false,
     "event_processors": {

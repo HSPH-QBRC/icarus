@@ -3,7 +3,7 @@
     "name": "states",
     "type": "SCHEDULED",
     "config": {
-        "schedule": "1 15 * * *"
+        "schedule": "15 15 * * *"
     },
     "disabled": false,
     "event_processors": {

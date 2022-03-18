@@ -3,7 +3,7 @@
     "name": "isoweeks-summary",
     "type": "SCHEDULED",
     "config": {
-        "schedule": "30 15 * * *"
+        "schedule": "20 15 * * *"
     },
     "disabled": false,
     "event_processors": {
