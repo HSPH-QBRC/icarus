@@ -10,7 +10,7 @@ exports = async function(){
       console.warn(`Number of entries in actualsTimeseries (${response["actualsTimeseries"].length}) does not match metricsTimeseries (${response["metricsTimeseries"].length})`);
     }
 
-    const updates = response["actualsTimeseries"].map(actuals => {
+    await collection.bulkWrite(response["actualsTimeseries"].map(actuals => {
       const metrics = response["metricsTimeseries"].find(element => element["date"] === actuals["date"]);
       if (metrics === undefined) {
         throw new Error(`No metrics found for date: ${actuals["date"]}`);
@@ -39,7 +39,6 @@ exports = async function(){
           "upsert": true
         }
       };
-    })
-    await collection.bulkWrite(updates);
+    }));
   }
 };
