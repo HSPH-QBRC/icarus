@@ -181,6 +181,6 @@ exports = async function(payload, response) {
     }
   ]);
 
-  await collection.aggregate(pipeline).toArray();
+  collection.aggregate(pipeline).toArray();
   }  // end for
 };
