@@ -8,4 +8,5 @@
 
 .terraform/
 .vagrant/
-webserver/keys/
+webserver/icarus/config.ini
+webserver/secrets/
