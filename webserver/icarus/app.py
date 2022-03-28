@@ -4,6 +4,7 @@ import io
 import os
 
 from flask import Flask, make_response, render_template
+from pymongo.errors import ConnectionFailure
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
@@ -41,8 +42,12 @@ def data(collection=None):
     # ignore _id field
     writer = csv.DictWriter(text_stream, fields, extrasaction='ignore')
     writer.writeheader()
-    for document in db[f"{collection}.weekly"].find():
-        writer.writerow(document)
+    try:
+        for document in db[f"{collection}.weekly"].find():
+            writer.writerow(document)
+    except ConnectionFailure:
+        return "Database connection error", 500
+
     response = make_response(text_stream.getvalue())
     response.headers["Content-Disposition"] = \
         f"attachment; filename={collection}.csv"
