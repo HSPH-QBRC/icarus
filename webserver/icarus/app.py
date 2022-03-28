@@ -31,16 +31,15 @@ def home():
 def data(collection=None):
     if collection is None:
         return render_template("data.html")
-    elif collection == "dartmouth":
-        fields = ["week", "positive_tests", "total_tests"]
-        text_stream = io.StringIO()
-        # ignore _id field
-        writer = csv.DictWriter(text_stream, fields, extrasaction='ignore')
-        writer.writeheader()
-        for doc in db.dartmouth.find():
-            writer.writerow(doc)
-        response = make_response(text_stream.getvalue())
-        response.headers["Content-Disposition"] = \
-            "attachment; filename=dartmouth.csv"
-        response.headers["Content-type"] = "text/csv"
-        return response
+    fields = ["week", "tests", "positives"]
+    text_stream = io.StringIO()
+    # ignore _id field
+    writer = csv.DictWriter(text_stream, fields, extrasaction='ignore')
+    writer.writeheader()
+    for document in db[f"{collection}.weekly"].find():
+        writer.writerow(document)
+    response = make_response(text_stream.getvalue())
+    response.headers["Content-Disposition"] = \
+        f"attachment; filename={collection}.csv"
+    response.headers["Content-Type"] = "text/csv"
+    return response
