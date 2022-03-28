@@ -32,6 +32,10 @@ def home():
 def data(collection=None):
     if collection is None:
         return render_template("data.html")
+    if collection not in ["bostoncollege", "columbia", "dartmouth", "duke",
+                          "harvard", "northeastern", "princeton"]:
+        return "Collection not found", 404
+
     fields = ["week", "tests", "positives"]
     text_stream = io.StringIO()
     # ignore _id field
