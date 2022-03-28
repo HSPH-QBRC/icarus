@@ -8,4 +8,8 @@
 
 .terraform/
 .vagrant/
-webserver/keys/
+
+__pycache__/
+
+/webserver/icarus/config.ini
+/webserver/secrets/
