@@ -1,6 +1,7 @@
 import configparser
 import csv
 import io
+import os
 
 from flask import Flask, make_response, render_template
 from pymongo.mongo_client import MongoClient
@@ -9,7 +10,7 @@ from pymongo.server_api import ServerApi
 app = Flask(__name__)
 
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read(os.path.join(os.path.dirname(__file__), "config.ini"))
 mongo = config["MongoDB"]
 
 conn_str = (
