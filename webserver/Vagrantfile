@@ -20,11 +20,16 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     set -ex
+
+    # install Puppet
     /usr/bin/dnf -y install https://yum.puppet.com/puppet7-release-el-8.noarch.rpm
-    /usr/bin/dnf -y install puppet-agent
-    /opt/puppetlabs/bin/puppet module install puppetlabs-apache --version 7.0.0
-    /opt/puppetlabs/bin/puppet module install puppet-python --version 6.2.1
-    /opt/puppetlabs/bin/puppet module install puppet-selinux --version 3.4.1
+    /usr/bin/dnf -y install puppet-agent ruby
+
+    # install librarian-puppet and Puppet modules
+    /usr/bin/gem install librarian-puppet -v 3.0.1 --no-document
+    /usr/local/bin/librarian-puppet config path /opt/puppetlabs/puppet/modules --global
+    /usr/local/bin/librarian-puppet config tmp /tmp --global
+    PATH="${PATH}:/opt/puppetlabs/bin" && cd /vagrant/deployment/puppet && /usr/local/bin/librarian-puppet install
   SHELL
 
   config.vm.provision "puppet" do |puppet|

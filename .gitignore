@@ -8,6 +8,7 @@
 
 .terraform/
 .vagrant/
+.librarian/
 
 __pycache__/
 

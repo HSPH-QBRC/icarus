@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+#^syntax detection
+
+forge "https://forgeapi.puppetlabs.com"
+
+mod 'puppetlabs-apache', '7.0.0'
+mod 'puppet-python', '6.2.1'
+mod 'puppet-selinux', '3.4.1'
