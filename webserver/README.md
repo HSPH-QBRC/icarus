@@ -26,6 +26,7 @@ ssh -i /path/to/icarus-admin-key centos@covid.ivyplus.net
 ```
 Disable SELinux and reboot:
 ```shell
+sudo setenforce disabled
 sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 ```
 Configure Apache and Shibboleth
