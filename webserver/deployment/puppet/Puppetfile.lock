@@ -14,8 +14,14 @@ FORGE
       puppetlabs-stdlib (< 9.0.0, >= 4.13.1)
     puppetlabs-stdlib (8.1.0)
 
+PATH
+  remote: ./icarus
+  specs:
+    qbrc-icarus (0.1.0)
+
 DEPENDENCIES
   puppet-python (= 6.2.1)
   puppet-selinux (= 3.4.1)
   puppetlabs-apache (= 7.0.0)
+  qbrc-icarus (= 0.1.0)
 
