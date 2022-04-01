@@ -12,7 +12,14 @@ class icarus (
     mode => 'disabled'
   }
 
-  class { 'icarus::shibboleth': }
   class { 'icarus::python': }
   class { 'icarus::apache': }
+  ->
+  class { 'icarus::shibboleth::install': }
+  ->
+  class { 'icarus::shibboleth::config': }
+  ~>
+  service { 'shibd':
+    ensure => running,
+  }
 }
