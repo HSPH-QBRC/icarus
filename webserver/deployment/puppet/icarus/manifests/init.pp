@@ -9,6 +9,10 @@ class icarus (
   $app_root = "${project_root}/icarus"
   $app_group = $app_user
 
+  class { 'selinux':
+    mode => 'permissive'
+  }
+
   file { "${app_root}/config.ini":
     ensure => file,
     source => "${secrets_dir}/config.ini",
