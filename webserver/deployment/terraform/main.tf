@@ -18,7 +18,7 @@ terraform {
 
 locals {
   secrets_dir = "/home/centos"
-  tags        = { Name : "${title(terraform.workspace)} Icarus", Project : "Icarus", Terraform : "True" }
+  tags        = { Name : "${lower(terraform.workspace)}-icarus", Project : "Icarus", Terraform : "True" }
 }
 
 provider "aws" {

@@ -27,8 +27,19 @@ resource "aws_route_table_association" "public" {
 
 resource "aws_subnet" "public" {
   vpc_id                          = aws_vpc.main.id
+  availability_zone               = "us-east-2a"
   cidr_block                      = cidrsubnet(aws_vpc.main.cidr_block, 8, 10)
   ipv6_cidr_block                 = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 10)
+  map_public_ip_on_launch         = true
+  assign_ipv6_address_on_creation = true
+}
+
+resource "aws_subnet" "extra" {
+  # currently unused but ALB requires at least two subnets in two different AZs
+  vpc_id                          = aws_vpc.main.id
+  availability_zone               = "us-east-2b"
+  cidr_block                      = cidrsubnet(aws_vpc.main.cidr_block, 8, 11)
+  ipv6_cidr_block                 = cidrsubnet(aws_vpc.main.ipv6_cidr_block, 8, 11)
   map_public_ip_on_launch         = true
   assign_ipv6_address_on_creation = true
 }
