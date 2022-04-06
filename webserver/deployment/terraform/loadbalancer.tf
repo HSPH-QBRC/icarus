@@ -3,6 +3,7 @@ resource "aws_lb" "web" {
   name            = local.tags.Name
   ip_address_type = "dualstack"
   subnets         = [aws_subnet.public.id, aws_subnet.extra.id]
+  security_groups = [aws_security_group.web_server.id]
 }
 
 resource "aws_lb_listener" "https" {
