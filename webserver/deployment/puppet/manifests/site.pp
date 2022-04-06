@@ -4,5 +4,6 @@ node default {
     app_user     => $facts['app_user'],
     virtualenv   => $facts['virtualenv'],
     project_root => $facts['project_root'],
+    secrets_dir  => $facts['secrets_dir'],
   }
 }

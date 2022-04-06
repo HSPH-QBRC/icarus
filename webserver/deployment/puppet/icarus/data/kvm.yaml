@@ -1,0 +1,5 @@
+---
+icarus::app_user: "centos"
+icarus::virtualenv: "/home/centos/venv"
+icarus::project_root: "/srv/icarus/webserver"
+icarus::secrets_dir: "/home/centos"

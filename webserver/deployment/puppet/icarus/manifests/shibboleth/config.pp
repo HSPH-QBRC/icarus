@@ -1,38 +1,41 @@
 class icarus::shibboleth::config () {
-  file { '/etc/shibboleth/prod-idp-metadata.xml':
+  $shib_conf_dir = "/etc/shibboleth"
+
+  file { "${shib_conf_dir}/prod-idp-metadata.xml":
     ensure => file,
-    source => "puppet:///modules/icarus/prod-idp-metadata.xml",
+    source => 'puppet:///modules/icarus/prod-idp-metadata.xml',
   }
-  file { '/etc/shibboleth/attribute-map.xml':
+  file { "${shib_conf_dir}/attribute-map.xml":
     ensure => file,
-    source => "puppet:///modules/icarus/attribute-map.xml",
+    source => 'puppet:///modules/icarus/attribute-map.xml',
   }
-  file { '/etc/shibboleth/shibboleth2.xml':
+  file { "${shib_conf_dir}/shibboleth2.xml":
     ensure => file,
-    source => "puppet:///modules/icarus/shibboleth2.xml",
+    source => 'puppet:///modules/icarus/shibboleth2.xml',
   }
-  file { '/etc/shibboleth/sp-encrypt-cert.pem':
+
+  file { "${shib_conf_dir}/sp-encrypt-cert.pem":
     ensure => file,
-    source => "${icarus::project_root}/secrets/sp-encrypt-cert.pem",
+    source => "${icarus::secrets_dir}/sp-encrypt-cert.pem",
     owner  => 'shibd',
     group  => 'shibd',
   }
-  file { '/etc/shibboleth/sp-encrypt-key.pem':
+  file { "${shib_conf_dir}/sp-encrypt-key.pem":
     ensure => file,
-    source => "${icarus::project_root}/secrets/sp-encrypt-key.pem",
+    source => "${icarus::secrets_dir}/sp-encrypt-key.pem",
     owner  => 'shibd',
     group  => 'shibd',
     mode   => '0600',
   }
-  file { '/etc/shibboleth/sp-signing-cert.pem':
+  file { "${shib_conf_dir}/sp-signing-cert.pem":
     ensure => file,
-    source => "${icarus::project_root}/secrets/sp-signing-cert.pem",
+    source => "${icarus::secrets_dir}/sp-signing-cert.pem",
     owner  => 'shibd',
     group  => 'shibd',
   }
-  file { '/etc/shibboleth/sp-signing-key.pem':
+  file { "${shib_conf_dir}/sp-signing-key.pem":
     ensure => file,
-    source => "${icarus::project_root}/secrets/sp-signing-key.pem",
+    source => "${icarus::secrets_dir}/sp-signing-key.pem",
     owner  => 'shibd',
     group  => 'shibd',
     mode   => '0600',

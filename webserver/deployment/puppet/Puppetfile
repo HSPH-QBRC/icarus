@@ -5,6 +5,5 @@ forge "https://forgeapi.puppetlabs.com"
 
 mod 'puppetlabs-apache', '7.0.0'
 mod 'puppet-python', '6.2.1'
-mod 'puppet-selinux', '3.4.1'
 
 mod 'qbrc-icarus', '0.1.0', :path => './icarus'

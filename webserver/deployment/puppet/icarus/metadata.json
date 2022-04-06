@@ -7,8 +7,7 @@
   "source": "https://github.com/hsph-qbrc/icarus",
   "dependencies": [
     { "name": "puppetlabs-apache", "version_requirement": "7.0.0" },
-    { "name": "puppet-python", "version_requirement": "6.2.1" },
-    { "name": "puppet-selinux", "version_requirement": "3.4.1" }
+    { "name": "puppet-python", "version_requirement": "6.2.1" }
   ],
   "operatingsystem_support": [
     { "operatingsystem": "CentOS", "operatingsystemrelease": ["8"] },
