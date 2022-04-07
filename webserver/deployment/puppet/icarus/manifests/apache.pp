@@ -12,7 +12,14 @@ class icarus::apache () {
     port                         => 80,
     docroot                      => false,
     directories                  => [
-      { path => $icarus::app_root },
+      {
+        path => $icarus::app_root
+      },
+      {
+        path       => '/Shibboleth.sso',
+        provider   => 'location',
+        sethandler => 'shib',
+      }
     ],
     wsgi_script_aliases          => { '/' => "${icarus::app_root}/wsgi.py" },
     wsgi_daemon_process          => {
