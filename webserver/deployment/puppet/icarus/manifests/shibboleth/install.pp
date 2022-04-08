@@ -3,10 +3,6 @@ class icarus::shibboleth::install () {
     ensure => file,
     source => "puppet:///modules/icarus/shibboleth.repo",
   }
-  package { 'shibboleth':
-    require => [
-      File['/etc/yum.repos.d/shibboleth.repo'],
-      Class['icarus::apache'],
-    ]
-  }
+  ->
+  package { 'shibboleth': }
 }

@@ -29,5 +29,6 @@ class icarus (
   ~>
   service { 'shibd':
     ensure => running,
+    enable => true,
   }
 }

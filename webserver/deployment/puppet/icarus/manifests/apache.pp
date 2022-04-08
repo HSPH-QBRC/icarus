@@ -1,5 +1,10 @@
 class icarus::apache () {
-  class { 'apache': }
+  class { 'apache':
+    default_mods => false,
+  }
+
+  # required by mod_shib
+  class { 'apache::mod::authn_core': }
 
   class { 'apache::mod::wsgi':
     package_name => "${icarus::python_version}-mod_wsgi",
