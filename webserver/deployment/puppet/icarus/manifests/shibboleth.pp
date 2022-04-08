@@ -5,6 +5,8 @@ class icarus::shibboleth () {
   }
   ->
   package { 'shibboleth': }
+  ->
+  class { 'icarus::shibboleth::config': }
 }
 
 class icarus::shibboleth::config () {

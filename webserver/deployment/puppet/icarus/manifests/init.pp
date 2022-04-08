@@ -21,11 +21,10 @@ class icarus (
   }
 
   class { 'icarus::python': }
+
   class { 'icarus::apache': }
   ->
   class { 'icarus::shibboleth': }
-  ->
-  class { 'icarus::shibboleth::config': }
   ~>
   service { ['httpd.service', 'shibd']:
     ensure => running,
