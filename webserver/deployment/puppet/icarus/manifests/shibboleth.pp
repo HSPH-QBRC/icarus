@@ -1,3 +1,12 @@
+class icarus::shibboleth () {
+  file { '/etc/yum.repos.d/shibboleth.repo':
+    ensure => file,
+    source => "puppet:///modules/icarus/shibboleth.repo",
+  }
+  ->
+  package { 'shibboleth': }
+}
+
 class icarus::shibboleth::config () {
   $shib_conf_dir = "/etc/shibboleth"
 

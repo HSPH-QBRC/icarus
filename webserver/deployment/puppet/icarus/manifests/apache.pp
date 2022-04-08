@@ -2,7 +2,6 @@ class icarus::apache () {
   class { 'apache':
     default_mods => false,
   }
-
   # required by mod_shib
   class { 'apache::mod::authn_core': }
 
