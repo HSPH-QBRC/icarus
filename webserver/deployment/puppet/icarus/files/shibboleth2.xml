@@ -24,7 +24,7 @@
         -->
        <Sessions lifetime="28800" timeout="3600" relayState="ss:mem"
                   checkAddress="false" handlerSSL="false" cookieProps="https"
-                  redirectLimit="exact">
+                  redirectLimit="exact+allow" redirectAllow="https://key.harvard.edu/">
 
             <!--
             Configures SSO for a default IdP. To properly allow for >1 IdP, remove
