@@ -52,7 +52,7 @@ class icarus::apache () {
 
   # for convenience
   file { '/var/log/httpd':
-    mode    => 'o+rx',
+    mode    => 'a+rx',
     require => Class['Apache'],
   }
 }
