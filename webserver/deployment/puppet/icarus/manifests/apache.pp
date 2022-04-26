@@ -7,6 +7,7 @@ class icarus::apache () {
 
   # to prevent HTTP 404 errors for load balancer health checks
   class { 'apache::mod::dir': }
+  file { '/var/www/html/index.html': }
 
   class { 'apache::mod::wsgi':
     package_name => "${icarus::python_version}-mod_wsgi",
