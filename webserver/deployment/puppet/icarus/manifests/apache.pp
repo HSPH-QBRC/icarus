@@ -5,6 +5,9 @@ class icarus::apache () {
   # required by mod_shib
   class { 'apache::mod::authn_core': }
 
+  # to prevent HTTP 404 errors for load balancer health checks
+  class { 'apache::mod::dir': }
+
   class { 'apache::mod::wsgi':
     package_name => "${icarus::python_version}-mod_wsgi",
     mod_path     => 'mod_wsgi_python3.so',
