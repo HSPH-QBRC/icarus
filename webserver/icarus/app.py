@@ -29,10 +29,12 @@ def home():
 
 
 @app.route("/secure/")
+def data():
+    return render_template("data.html")
+
+
 @app.route("/secure/<collection>")
-def data(collection=None):
-    if collection is None:
-        return render_template("data.html")
+def download(collection=None):
     if collection not in ["bostoncollege", "columbia", "dartmouth", "duke",
                           "harvard", "northeastern", "princeton"]:
         return "Collection not found", 404
