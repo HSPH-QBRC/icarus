@@ -48,3 +48,11 @@ aws s3 mb s3://icarus-terraform --region us-east-2
 aws s3api put-bucket-tagging --bucket icarus-terraform --tagging 'TagSet=[{Key=Project,Value=Icarus}]'
 ```
 Generate or retrieve the secrets from backup and copy to `s3://icarus-terraform/keys`
+
+### Shibboleth keys
+Regenerating is required for a new entity ID and host name
+```shell
+cd /etc/shibboleth
+sudo ./keygen.sh -f -u shibd -g shibd -y 10 -n sp-encrypt -h covid.ivyplus.net -e https://covid.ivyplus.net/sp/shibboleth
+sudo ./keygen.sh -f -u shibd -g shibd -y 10 -n sp-signing -h covid.ivyplus.net -e https://covid.ivyplus.net/sp/shibboleth
+```
