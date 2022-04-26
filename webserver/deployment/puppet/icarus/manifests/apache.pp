@@ -49,4 +49,10 @@ class icarus::apache () {
     # https://aws.amazon.com/premiumsupport/knowledge-center/elb-capture-client-ip-addresses/
     access_log_format            => $icarus::log_format,
   }
+
+  # for convenience
+  file { '/var/log/httpd':
+    mode    => 'o+rx',
+    require => Class['Apache'],
+  }
 }

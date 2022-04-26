@@ -51,4 +51,9 @@ class icarus::shibboleth::config () {
     group  => 'shibd',
     mode   => '0600',
   }
+
+  # for convenience
+  file { '/var/log/shibboleth':
+    mode => 'o+rx',
+  }
 }
