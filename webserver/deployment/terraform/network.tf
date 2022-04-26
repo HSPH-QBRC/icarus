@@ -44,24 +44,52 @@ resource "aws_subnet" "extra" {
   assign_ipv6_address_on_creation = true
 }
 
+resource "aws_security_group" "load_balancer" {
+  name        = "${local.tags.Name}-loadbalancer"
+  description = "Allow HTTP and HTTPS access"
+  vpc_id      = aws_vpc.main.id
+}
+# using standalone security group rules to avoid cycle errors
+resource "aws_security_group_rule" "http_ingress" {
+  description       = "Allow inbound HTTP traffic from Internet to ALB"
+  type              = "ingress"
+  from_port         = 80
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  security_group_id = aws_security_group.load_balancer.id
+}
+resource "aws_security_group_rule" "https_ingress" {
+  description       = "Allow inbound HTTPS traffic from Internet to ALB"
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  security_group_id = aws_security_group.load_balancer.id
+}
+resource "aws_security_group_rule" "http_egress" {
+  description              = "Allow HTTP egress from ALB to web server"
+  type                     = "egress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.web_server.id
+  security_group_id        = aws_security_group.load_balancer.id
+}
+
 resource "aws_security_group" "web_server" {
-  description = "Allow HTTP, HTTPS, and SSH access"
+  name        = "${local.tags.Name}-webserver"
+  description = "Allow inbound HTTP from ALB and SSH access from the Internet"
   vpc_id      = aws_vpc.main.id
   ingress {
-    description      = "HTTP"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-  ingress {
-    description      = "HTTPS"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    description     = "HTTP"
+    from_port       = 80
+    to_port         = 80
+    protocol        = "tcp"
+    security_groups = [aws_security_group.load_balancer.id]
   }
   ingress {
     description      = "SSH"
