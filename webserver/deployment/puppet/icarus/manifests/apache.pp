@@ -42,5 +42,8 @@ class icarus::apache () {
     # https://github.com/puppetlabs/puppetlabs-apache/blob/main/manifests/vhost.pp#L2139
     use_servername_for_filenames => true,
     use_port_for_filenames       => true,
+    # capture client IP addresses from load balancer on AWS
+    # https://aws.amazon.com/premiumsupport/knowledge-center/elb-capture-client-ip-addresses/
+    access_log_format            => $icarus::log_format,
   }
 }

@@ -4,6 +4,7 @@ class icarus (
   String $virtualenv,
   String $project_root,
   String $secrets_dir,
+  String $log_format,
 ) {
   $python_version = 'python39'
   $app_root = "${project_root}/icarus"
