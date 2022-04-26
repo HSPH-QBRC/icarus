@@ -3,4 +3,4 @@ icarus::app_user: "centos"
 icarus::virtualenv: "/home/centos/venv"
 icarus::project_root: "/srv/icarus/webserver"
 icarus::secrets_dir: "/home/centos"
-icarus::log_format: 'LogFormat "%{X-Forwarded-For}i %h %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\""'
+icarus::log_format: "forwarded"
