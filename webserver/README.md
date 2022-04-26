@@ -1,6 +1,16 @@
 ## Vagrant
 
-### Prerequisites
+Install [VirtualBox](https://www.virtualbox.org/wiki/Downloads) and [Vagrant](https://www.vagrantup.com/downloads)
+
+### Set up a Vagrant VM
+```shell
+cd webserver
+vagrant up
+```
+Open http://localhost:8080/ in a web browser
+
+## AWS
+
 Install [AWS CLI](https://aws.amazon.com/cli/) and [Terraform CLI](https://www.terraform.io/downloads)
 
 ### Configure AWS CLI
@@ -9,34 +19,32 @@ aws configure --profile <profile-name>
 export AWS_PROFILE=<profile-name>
 ```
 
+### Download secrets
+```shell
+mkdir webserver/deployment/secrets
+aws s3 cp s3://icarus-terraform/keys webserver/deployment/secrets --recursive 
+```
+
 ### Configure Terraform CLI
+Note that workspace name will be used for naming resources
+```shell
+cd webserver/deployment/terraform
+terraform init
+terraform workspace new dev
+terraform apply
+```
+Open https://covid.ivyplus.net/ in a web browser
+
+### Miscellaneous
+SSH into the web server instance:
+```shell
+ssh -i webserver/deployment/secrets/icarus-admin.pem centos@<web_instance_ip>
+```
+
+### Initial setup
+Only required once to boostrap
 ```shell
 aws s3 mb s3://icarus-terraform --region us-east-2
 aws s3api put-bucket-tagging --bucket icarus-terraform --tagging 'TagSet=[{Key=Project,Value=Icarus}]'
-
-terraform init
-
-terraform workspace new dev
 ```
-
-## AWS
-
-```shell
-ssh -i /path/to/icarus-admin-key centos@covid.ivyplus.net
-```
-Disable SELinux and reboot:
-```shell
-sudo setenforce disabled
-sudo sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
-```
-Configure Apache and Shibboleth
-```shell
-git clone git@github.com:HSPH-QBRC/icarus.git
-sudo cp ~/icarus/webserver/shibboleth.repo /etc/yum.repos.d
-sudo dnf install -y httpd mod_ssl shibboleth
-sudo cp ~/icarus/webserver/prod-idp-metadata.xml /etc/shibboleth
-sudo cp ~/icarus/webserver/attribute-map.xml /etc/shibboleth
-sudo cp ~/icarus/webserver/shibboleth2.xml /etc/shibboleth
-sudo systemctl enable httpd shibd --now
-sudo chmod +rx /var/log/httpd /var/log/shibboleth
-```
+Generate or retrieve the secrets from backup and copy to `s3://icarus-terraform/keys`
