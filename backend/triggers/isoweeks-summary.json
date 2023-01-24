@@ -3,7 +3,8 @@
     "name": "isoweeks-summary",
     "type": "SCHEDULED",
     "config": {
-        "schedule": "20 15 * * *"
+        "schedule": "20 15 * * *",
+        "skip_catchup_events": false
     },
     "disabled": false,
     "event_processors": {

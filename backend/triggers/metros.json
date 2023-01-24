@@ -3,7 +3,8 @@
     "name": "metros",
     "type": "SCHEDULED",
     "config": {
-        "schedule": "10 15 * * *"
+        "schedule": "10 15 * * *",
+        "skip_catchup_events": false
     },
     "disabled": false,
     "event_processors": {

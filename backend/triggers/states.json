@@ -3,7 +3,8 @@
     "name": "states",
     "type": "SCHEDULED",
     "config": {
-        "schedule": "15 15 * * *"
+        "schedule": "15 15 * * *",
+        "skip_catchup_events": false
     },
     "disabled": false,
     "event_processors": {

@@ -3,7 +3,8 @@
     "name": "harvard-testing",
     "type": "SCHEDULED",
     "config": {
-        "schedule": "0 15 * * *"
+        "schedule": "0 15 * * *",
+        "skip_catchup_events": false
     },
     "disabled": false,
     "event_processors": {
